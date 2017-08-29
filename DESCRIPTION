@@ -2,7 +2,7 @@ Package: cfa
 Type: Package
 Title: Counterfactual Analysis
 Version: 0.1.0
-Author: Weige Huang <weige.huang@temple.edu>
+Author: Weige Huang <weige.huang@temple.edu> and Brantly Callaway <brantly.callaway@temple.edu>
 Maintainer: Weige Huang <weige.huang@temple.edu>
 Description: Use quantile and distribution regression to obtain the counterfactual distributions and quantiles.
 License: GPL-2
