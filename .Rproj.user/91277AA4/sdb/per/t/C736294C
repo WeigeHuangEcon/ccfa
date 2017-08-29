@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#' Obtain the bootstrap version of quantiles\n#' @param Y The outcome variable\n#' @param X The control variables\n#' @param t The treatment variable\n#' @param y0 The cutoff values\n#' @param cts A list of counterfactual treatments\n#' @param B The number of bootstrap repetions\n#' @param quants The quantiles to be obtained\n#' @export\n#' @return The bootstrap version of quantiles\n#'\n#'\nboot.getCountQuants.dr=function(Y,X,t,y0,cts,B,quants=NULL){\n  if(is.null(quants)){\n    quants=c(0.1,0.5,0.9)\n  }\n  if(is.null(B)){\n    B=10\n  }\n  CountQuants.dr_list=list(list())\n  for(b in 1:B){\n    n <- nrow(X)\n    bdata<-cbind(Y,t,X)\n    bdata <- as.data.frame(bdata[sample(1:n, n, replace=T),])\n    Y=bdata$Y\n    X=as.matrix(bdata[,c(colnames(X))])\n    t=bdata$t\n\n    CondDiFs=getCondDiFs.dr(Y=Y,X=X,t=t,y0=y0)\n    # re_CountDisFs.dr=re_makeCountDisFs.dr(CondDiFs=CondDiFs,y0=y0,X=X,cts=cts)\n    CountQuants.dr=getCountQuants.dr(CondDiFs=CondDiFs,y0=y0,X=X,cts=cts,quants=quants)\n    CountQuants.dr_list[[b]]=CountQuants.dr\n  }\n  CountQuants.dr_list\n}\n",
+    "created" : 1503434320850.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2267794380",
+    "id" : "C736294C",
+    "lastKnownWriteTime" : 1499044271,
+    "last_content_update" : 1499044271,
+    "path" : "~/cfa/R/boot.getCountQuants.dr.R",
+    "project_path" : "R/boot.getCountQuants.dr.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "match.call(get, call(\"get\", \"abc\", i = FALSE, p = 3))\n## -> get(x = \"abc\", pos = 3, inherits = FALSE)\nfun <- function(x, lower = 0, upper = 1) {\n  structure((x - lower) / (upper - lower), CALL = match.call())\n}\nfun(4 * atan(1), u = pi)\n\ndbl_var <- c(1, 2.5, 4.5)\n# With the L suffix, you get an integer rather than a double\nint_var <- c(1L, 6L, 10L)\n# Use TRUE and FALSE (or T and F) to create logical vectors\nlog_var <- c(TRUE, FALSE, T, F)\nchr_var <- c(\"these are\", \"some strings\")",
+    "created" : 1500591379945.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "3004523715",
+    "id" : "D971D2E",
+    "lastKnownWriteTime" : 4294967302,
+    "last_content_update" : 1500599966725,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled3"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

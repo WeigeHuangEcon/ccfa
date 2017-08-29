@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "function (formula, family = gaussian, data, weights, subset, \n          na.action, start = NULL, etastart, mustart, offset, control = list(...), \n          model = TRUE, method = \"glm.fit\", x = FALSE, y = TRUE, contrasts = NULL, \n          ...) \n{\n  call <- match.call()\n  if (is.character(family)) \n    family <- get(family, mode = \"function\", envir = parent.frame())\n  if (is.function(family)) \n    family <- family()\n  if (is.null(family$family)) {\n    print(family)\n    stop(\"'family' not recognized\")\n  }\n  if (missing(data)) \n    data <- environment(formula)\n  mf <- match.call(expand.dots = FALSE)\n  m <- match(c(\"formula\", \"data\", \"subset\", \"weights\", \"na.action\", \n               \"etastart\", \"mustart\", \"offset\"), names(mf), 0L)\n  mf <- mf[c(1L, m)]\n  mf$drop.unused.levels <- TRUE\n  mf[[1L]] <- quote(stats::model.frame)\n  mf <- eval(mf, parent.frame())\n  if (identical(method, \"model.frame\")) \n    return(mf)\n  if (!is.character(method) && !is.function(method)) \n    stop(\"invalid 'method' argument\")\n  if (identical(method, \"glm.fit\")) \n    control <- do.call(\"glm.control\", control)\n  mt <- attr(mf, \"terms\")\n  Y <- model.response(mf, \"any\")\n  if (length(dim(Y)) == 1L) {\n    nm <- rownames(Y)\n    dim(Y) <- NULL\n    if (!is.null(nm)) \n      names(Y) <- nm\n  }\n  X <- if (!is.empty.model(mt)) \n    model.matrix(mt, mf, contrasts)\n  else matrix(, NROW(Y), 0L)\n  weights <- as.vector(model.weights(mf))\n  if (!is.null(weights) && !is.numeric(weights)) \n    stop(\"'weights' must be a numeric vector\")\n  if (!is.null(weights) && any(weights < 0)) \n    stop(\"negative weights not allowed\")\n  offset <- as.vector(model.offset(mf))\n  if (!is.null(offset)) {\n    if (length(offset) != NROW(Y)) \n      stop(gettextf(\"number of offsets is %d should equal %d (number of observations)\", \n                    length(offset), NROW(Y)), domain = NA)\n  }\n  mustart <- model.extract(mf, \"mustart\")\n  etastart <- model.extract(mf, \"etastart\")\n  fit <- eval(call(if (is.function(method)) \"method\" else method, \n                   x = X, y = Y, weights = weights, start = start, etastart = etastart, \n                   mustart = mustart, offset = offset, family = family, \n                   control = control, intercept = attr(mt, \"intercept\") > \n                     0L))\n  if (length(offset) && attr(mt, \"intercept\") > 0L) {\n    fit2 <- eval(call(if (is.function(method)) \"method\" else method, \n                      x = X[, \"(Intercept)\", drop = FALSE], y = Y, weights = weights, \n                      offset = offset, family = family, control = control, \n                      intercept = TRUE))\n    if (!fit2$converged) \n      warning(\"fitting to calculate the null deviance did not converge -- increase 'maxit'?\")\n    fit$null.deviance <- fit2$deviance\n  }\n  if (model) \n    fit$model <- mf\n  fit$na.action <- attr(mf, \"na.action\")\n  if (x) \n    fit$x <- X\n  if (!y) \n    fit$y <- NULL\n  fit <- c(fit, list(call = call, formula = formula, terms = mt, \n                     data = data, offset = offset, control = control, method = method, \n                     contrasts = attr(X, \"contrasts\"), xlevels = .getXlevels(mt, \n                                                                             mf)))\n  class(fit) <- c(fit$class, c(\"glm\", \"lm\"))\n  fit\n}",
+    "created" : 1500590962803.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "3088258399",
+    "id" : "9ADBF7FF",
+    "lastKnownWriteTime" : 0,
+    "last_content_update" : 1500590964822,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

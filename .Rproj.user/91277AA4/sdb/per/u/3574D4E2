@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library(devtools)\nlibrary(roxygen2)",
+    "created" : 1500479222908.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "1578956654",
+    "id" : "3574D4E2",
+    "lastKnownWriteTime" : 7019813714331315234,
+    "last_content_update" : 1500479289840,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

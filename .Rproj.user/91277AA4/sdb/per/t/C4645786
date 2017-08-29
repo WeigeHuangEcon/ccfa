@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "Package: cfa\nType: Package\nTitle: Counterfactual Analysis\nVersion: 0.1.0\nAuthor: Weige Huang <weige.huang@temple.edu>\nMaintainer: Weige Huang <weige.huang@temple.edu>\nDescription: Use quantile and distribution regression to obtain the counterfactual distributions and quantiles.\nLicense: GPL-2\nEncoding: UTF-8\nLazyData: true\nImports: quantreg\nRoxygenNote: 6.0.1.9000\n",
+    "created" : 1503434628010.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1994906055",
+    "id" : "C4645786",
+    "lastKnownWriteTime" : 1498968347,
+    "last_content_update" : 1498968347,
+    "path" : "~/cfa/DESCRIPTION",
+    "project_path" : "DESCRIPTION",
+    "properties" : {
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "dcf"
+}
