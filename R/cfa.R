@@ -26,14 +26,15 @@ cfa <- function(tvals, yvals, data, yname, tname, xnames=NULL, drobj=NULL,
     if (se) {
         cat("boostrapping standard errors...\n")
         n <- nrow(data)
-        pb <- progress::progress_bar$new(total=iters)
-        for (i in 1:iters) {
-            pb$tick()
+        ##pb <- progress::progress_bar$new(total=iters)
+        ##for (i in 1:iters) {
+        ##    pb$tick()
+        bootiterlist <- pbapply::pblapply(1:iters, function(z) {
             b <- sample(1:n, n, replace=TRUE)
             bdta <- data[b,]
-            bootiterlist[[i]] <- compute.cfa(tvals, yvals, bdta, yname,
-                                         tname, xnames, drobj)$distcondt
-        }
+            compute.cfa(tvals, yvals, bdta, yname,
+                        tname, xnames, drobj)$distcondt
+        }, cl=8)
     }
 
     out <- CFA(tvals, cfa.res$distcondt, bootiterlist)
