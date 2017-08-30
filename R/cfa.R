@@ -8,7 +8,7 @@ compute.cfa <- function(tvals, yvals, data, yname, tname, xnames=NULL, drobj=NUL
     
     for (i in 1:length(tvals)) {
         xmat1 <- cbind(tvals[i], xmat)
-        thisdist <- unlist(lapply(lapply(yvals, predict.DR, drobj=drobj, xdf=xmat1), mean))
+        thisdist <- unlist(lapply(lapply(yvals, TempleMetrics::predict.DR, drobj=drobj, xdf=xmat1), mean))
         out[[i]] <- BMisc::makeDist(y_0, thisdist, rearrange=TRUE)##pred(tvals[i], drobj=drobj, yvals=yvals, xmat=xmat1)
     }
 
