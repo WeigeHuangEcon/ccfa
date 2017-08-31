@@ -60,10 +60,10 @@ getRes.CFA <- function(cfaobj, fun, se=T, ...) {
         for (i in 1:length(bootiterlist)) {
             bootout[[i]] <- t(simplify2array(lapply(bootiterlist[[i]], fun, ...)))
         }
-        se <- apply(simplify2array(bootout), c(1,2), sd)
-        se <- if (nrow(se)==1) as.numeric(se) else se
+        ses <- apply(simplify2array(bootout), c(1,2), sd)
+        ses <- if (nrow(ses)==1) as.numeric(ses) else ses
     }
-    return(CFASE(tvals=tvals,est=out, se=se))
+    return(CFASE(tvals=tvals,est=out, se=ses))
 }
 
 diff.cfa <- function(tvals, yvals, data, yname, tname,
