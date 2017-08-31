@@ -1,4 +1,10 @@
 
+E <- function(edf) {
+    tau <- seq(.01,.99,.01)
+    E <- mean(quantile(edf, tau, type=1))
+    E
+}
+
 Var <- function(edf) {
     tau <- seq(.01,.99,.01)
     E <- mean(quantile(edf, tau, type=1))
