@@ -7,7 +7,7 @@ compute.cfa <- function(tvals, yvals, data, yname, tname, xnames=NULL, drobj=NUL
     out <- list()
     
     for (i in 1:length(tvals)) {
-        xmat1 <- cbind(tvals[i], xmat)
+        xmat1 <- cbind.data.frame(tvals[i], xmat)
         thisdist <- unlist(lapply(lapply(yvals, TempleMetrics::predict.DR, drobj=drobj, xdf=xmat1), mean))
         out[[i]] <- BMisc::makeDist(y_0, thisdist, rearrange=TRUE)##pred(tvals[i], drobj=drobj, yvals=yvals, xmat=xmat1)
     }
@@ -65,6 +65,18 @@ getRes.CFA <- function(cfaobj, fun, se=T, ...) {
     }
     return(CFASE(tvals=tvals,est=out, se=se))
 }
+
+diff.cfa <- function(tvals, yvals, data, yname, tname,
+                     xnames1=NULL, drobj1=NULL,
+                     xnames2=NULL, drobj2=NULL,
+                     se=TRUE, iters=100, fun, ...) {
+
+    cfa1 <- compute.cfa(tvals, yvals, data, yname, tname, xnames1, drobj2)
+    cfa2 <- compute.cfa(tvals, yvals, data, yname, tname, xnames2, drobj2)
+
+    getRes.CFA(cfa1, fun, se=F, ...)$est -    getRes.CFA(cfa2, fun, se=F, ...)
+}
+    
 
 CFASE <- function(tvals, est, se=NULL) {
     out <- list(tvals=tvals, est=est, se=se)
