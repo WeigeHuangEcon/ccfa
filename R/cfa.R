@@ -55,6 +55,7 @@ getRes.CFA <- function(cfaobj, fun, se=T, ...) {
     out <- t(simplify2array(lapply(discondt, fun, ...)))
     out <- if (nrow(out)==1) as.numeric(out) else out
 
+    ses <- NULL
     if (se) {
         bootout <- list()
         for (i in 1:length(bootiterlist)) {
