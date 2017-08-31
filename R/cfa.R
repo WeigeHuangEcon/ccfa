@@ -75,9 +75,26 @@ diff.cfa <- function(tvals, yvals, data, yname, tname,
     cfa1 <- compute.cfa(tvals, yvals, data, yname, tname, xnames1, drobj2)
     cfa2 <- compute.cfa(tvals, yvals, data, yname, tname, xnames2, drobj2)
 
-    getRes.CFA(cfa1, fun, se=F, ...)$est -    getRes.CFA(cfa2, fun, se=F, ...)
-}
-    
+    diffest <- getRes.CFA(cfa1, fun, se=F, ...)$est - getRes.CFA(cfa2, fun, se=F, ...)$est
+
+    ses <- NULL
+    if (se) {
+        bootiterlist <- list()
+        n <- nrow(data)
+        cat("bootstrapping standard errors...\n")
+        bootiterlist <- pbapply::pblapply(1:iters, function(z) {
+            b <- sample(1:n, n, T)
+            dtab <- data[b,]
+            cfa1b <- compute.cfa(tvals, yvals, dtab, yname, tname, xnames1, drobj2)
+            cfa2b <- compute.cfa(tvals, yvals, dtab, yname, tname, xnames2, drobj2)
+            diffestb <- as.matrix(getRes.CFA(cfa1b, fun, se=F, ...)$est - getRes.CFA(cfa2b, fun, se=F, ...)$est)
+        }, cl=8)
+
+        ses <- apply(simplify2array(bootiterlist), c(1,2), sd)
+        ses <- if (nrow(ses)==1 | ncol(ses)==1) as.numeric(ses) else ses
+    }
+    return(CFASE(tvals=tvals,est=diffest, se=ses))
+}    
 
 CFASE <- function(tvals, est, se=NULL) {
     out <- list(tvals=tvals, est=est, se=se)
