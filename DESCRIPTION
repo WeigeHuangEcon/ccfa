@@ -8,5 +8,6 @@ Description: Use quantile and distribution regression to obtain the counterfactu
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-Imports: quantreg
+Imports: quantreg,
+    stats
 RoxygenNote: 6.0.1.9000
