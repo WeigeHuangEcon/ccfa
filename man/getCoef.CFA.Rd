@@ -9,14 +9,11 @@ getCoef.CFA(cfaobj, yvals, se = T, ...)
 \arguments{
 \item{cfaobj}{a CFA object}
 
+\item{yvals}{the y values that the cfa object is computed for}
+
 \item{se}{whether or not to compute standard errors}
 
 \item{...}{can pass additional arguments to fun using this argument}
-
-\item{fun}{a function to apply for every value of the treatment in the
-cfaobj}
-
-\item{setype}{whether to comput "pointwise" or "uniform" standard errors}
 }
 \value{
 CFASE object

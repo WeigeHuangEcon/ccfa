@@ -1,0 +1,129 @@
+compute.cfa2 <- function(tvals, yvals, data, yname, tname, xnames=NULL, condDistobj=NULL, method="dr", link="logit", tau=seq(.1,.99,.01)) {
+    obj <- condDistobj
+    xmat <- data[,xnames]
+    if (is.null(obj)) {
+        formla <- as.formula(paste0(yname,"~",tname))
+        formla <- addCovToFormla(xnames, formla)
+        if (method == "dr") {
+            obj <- distreg(formla, data, yvals, link)
+        } else if (method == "qr") {
+            obj <- rq(formla, tau=tau, data)
+        } else {
+            stop("method not yet implemented")
+        }
+    }
+
+    coef <- NULL
+    ##coef <- t(sapply(drobj$glmlist, coef))
+    
+    out <- list()
+    
+    ##for (i in 1:length(tvals)) {
+
+    out <- lapply(1:length(tvals), function(i) { 
+        xmat1 <- data
+        xmat1[,tname] <- tvals[i]
+        thisdist <- Fycondx(obj, yvals, xmat1)
+        combineDfs(yvals, thisdist)
+    } )
+
+    return(CFA.OBJ(tvals, out, coef=coef))
+
+}
+
+
+#' @title cfa.inner
+#'
+#' @description calls function to compute counterfactuals
+#'
+#' @param yname the name of the outcome (y) variable
+#' @param tname the name of the treatment (t) variable
+#' @param xnames the names of additional control variables to include
+#' @inheritParams cfa
+#'
+#' @return CFA object
+#'
+#' @keywords internal
+#' 
+#' @export
+cfa.inner <- function(tvals, yvals, data, yname, tname, xnames=NULL, drobj=NULL,
+                se=TRUE, iters=100, cl=1) {
+
+    cfa.res <- compute.cfa(tvals, yvals, data, yname, tname, xnames, drobj)
+
+    bootiterlist <- list()
+    tvallist <- list()
+    
+    if (se) {
+        cat("boostrapping standard errors...\n")
+        n <- nrow(data)
+        ##pb <- progress::progress_bar$new(total=iters)
+        ##for (i in 1:iters) {
+        ##    pb$tick()
+        bstrap <- pbapply::pblapply(1:iters, function(z) {
+            b <- sample(1:n, n, replace=TRUE)
+            bdta <- data[b,]
+            list(bootiter=compute.cfa(tvals, yvals, bdta, yname,
+                                          tname, xnames, drobj),##$distcondt,
+                 tvals=bdta[,tname])
+        }, cl=cl)
+        bootiterlist <- lapply(bstrap, function(x){ x$bootiter })
+        tvallist <- lapply(bstrap, function(x) { x$tvals })
+    }
+
+    out <- CFA.OBJ(tvals, cfa.res$distcondt, bootiterlist, tvallist, coef=cfa.res$coef)
+}
+
+#' @title cfa
+#'
+#' @description compute counterfactuals using distribution regression
+#'  with a continuous treatment
+#'
+#' @param formla a formula y ~ treatment
+#' @param xformla one sided formula for x variables to include, e.g. ~x1 + x2
+#' @param tvals the values of the "treatment" to compute parameters of
+#'  interest for
+#' @param yvals the values to compute the counterfactual distribution for
+#' @param data the data.frame where y, t, and x are
+#' @param yname the name of the outcome (y) variable
+#' @param tname the name of the treatment (t) variable
+#' @param xnames the names of additional control variables to include
+#' @param drobj optional distribution regression object that has been previously
+#'  computed
+#' @param se whether or not to compute standard errors using the bootstrap
+#' @param iters how many bootstrap iterations to use
+#' @param cl how many clusters to use for parallel computation of standard
+#'  errors
+#'
+#' @return CFA object
+#'
+#' @examples
+#' data(igm)
+#' tvals <- seq(10,12,length.out=10)
+#' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
+#' ## This line doesn't adjust for any covariates
+#' cfa(tvals, yvals, igm, "lcfincome", "lfincome", se=FALSE)
+#'
+#' ## This line adjusts for differences in education
+#' cfa(tvals, yvals, igm, "lcfincome", "lfincome", "HEDUC", se=FALSE)
+#' 
+#' @export
+cfa <- function(formla, xformla=NULL, tvals, yvals, data, drobj=NULL,
+                se=TRUE, iters=100, cl=1) {
+
+    formla <- as.formula(formla)
+    dta <- model.frame(terms(formla,data=data),data=data) #or model.matrix
+    yname <- colnames(dta)[1]
+    tname <- colnames(dta)[2]
+    xnames <- NULL
+    ##set up the x variables
+    if (!(is.null(xformla))) {
+        xformla <- as.formula(xformla)
+        xformla <- addCovToFormla("0", xformla)
+        xdta <- model.matrix(xformla, data=data)
+        dta <- cbind.data.frame(dta, xdta)
+        xnames <- colnames(xdta)[-1]
+    }
+
+    cfa.inner(tvals, yvals, dta, yname, tname, xnames, drobj, se, iters, cl)
+}

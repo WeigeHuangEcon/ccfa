@@ -10,8 +10,9 @@
 compute.cfa <- function(tvals, yvals, data, yname, tname, xnames=NULL, drobj=NULL) {
     xmat <- data[,xnames]
     if (is.null(drobj)) {
-        drobj <- TempleMetrics::distreg(yvals, data, yname,
-                                        xnames=c(tname,xnames))
+        formla <- as.formula(paste0(yname,"~",tname))
+        formla <- addCovToFormla(xnames, formla)
+        drobj <- distreg(formla, data, yvals)
     }
 
     coef <- t(sapply(drobj$glmlist, coef))
@@ -20,39 +21,82 @@ compute.cfa <- function(tvals, yvals, data, yname, tname, xnames=NULL, drobj=NUL
     
     for (i in 1:length(tvals)) {
         xmat1 <- cbind.data.frame(tvals[i], xmat)
-        thisdist <- unlist(lapply(lapply(yvals, TempleMetrics::predict.DR, drobj=drobj, xdf=xmat1), mean))
-        out[[i]] <- BMisc::makeDist(y_0, thisdist, rearrange=TRUE)##pred(tvals[i], drobj=drobj, yvals=yvals, xmat=xmat1)
+        thisdist <- unlist(lapply(lapply(yvals, predict.DR, drobj=drobj, xdf=xmat1), mean))
+        out[[i]] <- BMisc::makeDist(yvals, thisdist, rearrange=TRUE)##pred(tvals[i], drobj=drobj, yvals=yvals, xmat=xmat1)
     }
 
-    return(CFA(tvals, out, coef=coef))
+    return(CFA.OBJ(tvals, out, coef=coef))
 
 }
 
-#' @title cfa
+#' @title compute.cfa2
 #'
-#' @description compute counterfactuals using distribution regression
-#'  with a continuous treatment
+#' @description an update of compute.cfa that allows one to use other
+#'  other estimators such as quantile regression or nonparametric methods
+#'  (not yet implemented) as the first step estimator of the conditional
+#'  distribution
 #'
-#' @param tvals the values of the continuous treatment with which
-#'  to compute counterfactuals
-#' @param yvals the values to compute the counterfactual distribution fo
+#' @inheritParams compute.cfa
+#' @param condDist optional pre-estimated conditional distribution function
+#'
+#' @return CFA.OBJ
+#' @keywords internal
+#' @export
+compute.cfa2 <- function(tvals, yvals, data, yname, tname, xnames=NULL,  method="dr", link="logit", tau=seq(.1,.99,.01), condDistobj=NULL) {
+    obj <- condDistobj
+    xmat <- data[,xnames]
+    if (is.null(obj)) {
+        formla <- as.formula(paste0(yname,"~",tname))
+        formla <- addCovToFormla(xnames, formla)
+        if (method == "dr") {
+            obj <- distreg(formla, data, yvals, link)
+        } else if (method == "qr") {
+            obj <- rq(formla, tau=tau, data)
+        } else {
+            stop("method not yet implemented")
+        }
+    }
+
+    coef <- NULL
+    ##coef <- t(sapply(drobj$glmlist, coef))
+    
+    out <- list()
+    
+    ##for (i in 1:length(tvals)) {
+
+    out <- lapply(1:length(tvals), function(i) { 
+        xmat1 <- data
+        xmat1[,tname] <- tvals[i]
+        thisdist <- Fycondx(obj, yvals, xmat1)
+        combineDfs(yvals, thisdist)
+    } )
+
+    return(CFA.OBJ(tvals, out, coef=coef))
+
+}
+
+
+#' @title cfa.inner
+#'
+#' @description calls function to compute counterfactuals
+#'
 #' @param yname the name of the outcome (y) variable
 #' @param tname the name of the treatment (t) variable
 #' @param xnames the names of additional control variables to include
-#' @param drobj optional distribution regression object that has been previously
-#'  computed
-#' @param se whether or not to compute standard errors using the bootstrap
-#' @param iters how many bootstrap iterations to use
-#' @param cl how many clusters to use for parallel computation of standard
-#'  errors
+#' @inheritParams cfa
 #'
 #' @return CFA object
 #'
+#' @keywords internal
+#' 
 #' @export
-cfa <- function(tvals, yvals, data, yname, tname, xnames=NULL, drobj=NULL,
-                se=TRUE, iters=100, cl=1) {
+cfa.inner <- function(tvals, yvals, data, yname, tname, xnames=NULL,
+                      method="dr", link="logit", tau=seq(.01,.99,.01),
+                      condDistobj=NULL,
+                      se=TRUE, iters=100, cl=1) {
 
-    cfa.res <- compute.cfa(tvals, yvals, data, yname, tname, xnames, drobj)
+    cfa.res <- compute.cfa2(tvals, yvals, data, yname, tname, xnames,
+                            method, link, tau, condDistobj)
 
     bootiterlist <- list()
     tvallist <- list()
@@ -66,18 +110,81 @@ cfa <- function(tvals, yvals, data, yname, tname, xnames=NULL, drobj=NULL,
         bstrap <- pbapply::pblapply(1:iters, function(z) {
             b <- sample(1:n, n, replace=TRUE)
             bdta <- data[b,]
-            list(bootiter=compute.cfa(tvals, yvals, bdta, yname,
-                                          tname, xnames, drobj),##$distcondt,
+            list(bootiter=compute.cfa2(tvals, yvals, bdta, yname,
+                                      tname, xnames, method,
+                                      link, tau),##$distcondt,
                  tvals=bdta[,tname])
         }, cl=cl)
         bootiterlist <- lapply(bstrap, function(x){ x$bootiter })
         tvallist <- lapply(bstrap, function(x) { x$tvals })
     }
 
-    out <- CFA(tvals, cfa.res$distcondt, bootiterlist, tvallist, coef=cfa.res$coef)
+    out <- CFA.OBJ(tvals, cfa.res$distcondt, bootiterlist, tvallist, coef=cfa.res$coef)
 }
 
-#' @title title
+#' @title cfa
+#'
+#' @description compute counterfactuals using distribution regression
+#'  with a continuous treatment
+#'
+#' @param formla a formula y ~ treatment
+#' @param xformla one sided formula for x variables to include, e.g. ~x1 + x2
+#' @param tvals the values of the "treatment" to compute parameters of
+#'  interest for
+#' @param yvals the values to compute the counterfactual distribution for
+#' @param data the data.frame where y, t, and x are
+#' @param yname the name of the outcome (y) variable
+#' @param tname the name of the treatment (t) variable
+#' @param xnames the names of additional control variables to include
+#' @param method either "dr" or "qr" for distribution regression or quantile regression
+#' @param link if using distribution regression, any link function that works with the binomial family (e.g. logit (the default), probit, cloglog)
+#' @param tau if using quantile regression, which values of tau to estimate
+#'  the conditional quantiles
+#' @param drobj optional distribution regression object that has been previously
+#'  computed
+#' @param se whether or not to compute standard errors using the bootstrap
+#' @param iters how many bootstrap iterations to use
+#' @param cl how many clusters to use for parallel computation of standard
+#'  errors
+#' 
+#' @return CFA object
+#'
+#' @examples
+#' data(igm)
+#' tvals <- seq(10,12,length.out=10)
+#' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
+#' ## This line doesn't adjust for any covariates
+#' cfa(tvals, yvals, igm, "lcfincome", "lfincome", se=FALSE)
+#'
+#' ## This line adjusts for differences in education
+#' cfa(tvals, yvals, igm, "lcfincome", "lfincome", "HEDUC", se=FALSE)
+#' 
+#' @export
+cfa <- function(formla, xformla=NULL, tvals, yvals, data,
+                method="dr", link="logit", tau=seq(.01,.99,.01),
+                condDistobj=NULL,
+                se=TRUE, iters=100, cl=1) {
+
+    formla <- as.formula(formla)
+    dta <- model.frame(terms(formla,data=data),data=data) #or model.matrix
+    yname <- colnames(dta)[1]
+    tname <- colnames(dta)[2]
+    xnames <- NULL
+    ##set up the x variables
+    if (!(is.null(xformla))) {
+        xformla <- as.formula(xformla)
+        xformla <- addCovToFormla("0", xformla)
+        xdta <- model.matrix(xformla, data=data)
+        dta <- cbind.data.frame(dta, xdta)
+        xnames <- colnames(xdta)[-1]
+    }
+
+    cfa.inner(tvals, yvals, dta, yname, tname, xnames, method, link, tau,
+              condDistobj, se, iters, cl)
+}
+    
+
+#' @title CFA.OBJ
 #'
 #' @description CFA objects
 #'
@@ -87,10 +194,11 @@ cfa <- function(tvals, yvals, data, yname, tname, xnames=NULL, drobj=NULL,
 #' @param bootiterlist a list of bootstrapped CFA objects that can be used
 #'  for computing standard errors
 #' @param tvallist the values of the treatment used in each bootstrap iteration
+#' @param coef the coefficients from a distribution regression
 #'
 #' @return CFA object
 #' @export
-CFA <- function(tvals, distcondt, bootiterlist=NULL, tvallist=NULL, coef=NULL) {
+CFA.OBJ <- function(tvals, distcondt, bootiterlist=NULL, tvallist=NULL, coef=NULL) {
     out <- list(tvals=tvals, distcondt=distcondt, bootiterlist=bootiterlist, tvallist=tvallist, coef=coef)
     class(out) <- "CFA"
     out
@@ -105,7 +213,6 @@ CFA <- function(tvals, distcondt, bootiterlist=NULL, tvallist=NULL, coef=NULL) {
 #' @param fun a function to apply for every value of the treatment in the
 #'  cfaobj
 #' @param se whether or not to compute standard errors
-#' @param setype whether to comput "pointwise" or "uniform" standard errors
 #' @param ... can pass additional arguments to fun using this argument
 #'
 #' @return CFASE object
@@ -135,13 +242,13 @@ getRes.CFA <- function(cfaobj, fun, se=T,  ...) {
 
 #' @title getResDiff.CFA
 #'
-#' @description get a particular parameter of interest from a cfa object
+#' @description Get the difference between two CFA objects
 #'
-#' @param cfaobj a CFA object
+#' @param cfaobj1 the first CFA object
+#' @param cfaobj2 the second CFA object
 #' @param fun a function to apply for every value of the treatment in the
 #'  cfaobj
 #' @param se whether or not to compute standard errors
-#' @param setype whether to compute "pointwise" or "uniform" standard errors
 #' @param ... can pass additional arguments to fun using this argument
 #'
 #' @return CFASE object
@@ -177,10 +284,8 @@ getResDiff.CFA <- function(cfaobj1, cfaobj2, fun, se=T, ...) {
 #' @description get a particular parameter of interest from a cfa object
 #'
 #' @param cfaobj a CFA object
-#' @param fun a function to apply for every value of the treatment in the
-#'  cfaobj
+#' @param yvals the y values that the cfa object is computed for
 #' @param se whether or not to compute standard errors
-#' @param setype whether to comput "pointwise" or "uniform" standard errors
 #' @param ... can pass additional arguments to fun using this argument
 #'
 #' @return CFASE object
@@ -255,13 +360,44 @@ getCoef.CFA <- function(cfaobj, yvals, se=T,  ...) {
 #' @return list of two CFA objects
 #'
 #' @export
-cfa2 <- function(tvals, yvals, data, yname, tname,
-                 xnames1=NULL, drobj1=NULL,
-                 xnames2=NULL, drobj2=NULL,
+cfa2 <- function(formla, tvals, yvals, data, 
+                 xformla1=NULL, method1="dr", link1="logit",
+                 tau1=seq(.01,.99,.01), condDistobj1=NULL,
+                 xformla2=NULL, method2="dr", link2="logit",
+                 tau2=seq(.01,.99,.01), condDistobj2=NULL,
                  se=TRUE, iters=100, cl=1) {
 
-    cfa1 <- compute.cfa(tvals, yvals, data, yname, tname, xnames1, drobj2)
-    cfa2 <- compute.cfa(tvals, yvals, data, yname, tname, xnames2, drobj2)
+
+    formla <- as.formula(formla)
+    dta <- model.frame(terms(formla,data=data),data=data) #or model.matrix
+    yname <- colnames(dta)[1]
+    tname <- colnames(dta)[2]
+    xnames1 <- NULL
+    dta1 <- dta
+    ##set up the x variables
+    if (!(is.null(xformla1))) {
+        xformla1 <- as.formula(xformla1)
+        xformla1 <- addCovToFormla("0", xformla1)
+        xdta1 <- model.matrix(xformla1, data=data)
+        dta1 <- cbind.data.frame(dta, xdta1)
+        xnames1 <- colnames(xdta1)[-1]
+    }
+    dta2 <- dta
+    xnames2 <- NULL
+    ##set up the x variables
+    if (!(is.null(xformla2))) {
+        xformla2 <- as.formula(xformla2)
+        xformla2 <- addCovToFormla("0", xformla2)
+        xdta2 <- model.matrix(xformla2, data=data)
+        dta2 <- cbind.data.frame(dta, xdta2)
+        xnames2 <- colnames(xdta2)[-1]
+    }
+    
+    
+    cfa1 <- compute.cfa2(tvals, yvals, dta1, yname, tname, xnames1,
+                        method1, link1, tau1, condDistobj1)
+    cfa2 <- compute.cfa2(tvals, yvals, dta2, yname, tname, xnames2,
+                        method2, link2, tau2, condDistobj2)
 
 
     bootiterlist1 <- list()
@@ -277,10 +413,12 @@ cfa2 <- function(tvals, yvals, data, yname, tname,
         bstrap <- pbapply::pblapply(1:iters, function(z) {
             b <- sample(1:n, n, replace=TRUE)
             bdta <- data[b,]
-            list(bootiter1=compute.cfa(tvals, yvals, bdta, yname,
-                                       tname, xnames1, drobj1),##$distcondt,
-                 bootiter2=compute.cfa(tvals, yvals, bdta, yname,
-                                       tname, xnames2, drobj2),
+            list(bootiter1=compute.cfa2(tvals, yvals, bdta, yname,
+                                       tname, xnames1,
+                                       method1, link1, tau1),##$distcondt,
+                 bootiter2=compute.cfa2(tvals, yvals, bdta, yname,
+                                       tname, xnames2,
+                                       method2, link2, tau2),
                  tvals=bdta[,tname])
         }, cl=cl)
         bootiterlist1 <- lapply(bstrap, function(x){ x$bootiter1 })
@@ -288,8 +426,8 @@ cfa2 <- function(tvals, yvals, data, yname, tname,
         tvallist <- lapply(bstrap, function(x) { x$tvals })
     }
 
-    out <- list(cfa1=CFA(tvals, cfa1$distcondt, bootiterlist1, tvallist, coef=cfa1$coef),
-                cfa2=CFA(tvals, cfa2$distcondt, bootiterlist2, tvallist, coef=cfa2$coef))
+    out <- list(cfa1=CFA.OBJ(tvals, cfa1$distcondt, bootiterlist1, tvallist, coef=cfa1$coef),
+                cfa2=CFA.OBJ(tvals, cfa2$distcondt, bootiterlist2, tvallist, coef=cfa2$coef))
 }
 
 #' @title test.CFA
@@ -333,6 +471,110 @@ test.CFA <- function(cfaobj, fun, allt, se=T,  ...) {
         c <- quantile(cb, .95, type=1)
     }
     return(CFASE(tvals=tvals,est=out, se=ses, c=c))
+}
+
+
+lige <- function(cfaobj, h, se=T) {
+    tvals <- cfaobj$tvals
+    bootiterlist <- cfaobj$bootiterlist
+    e1res <- getRes.CFA(cfaobj, E, se=FALSE)
+    fe1res <- approxfun(tvals, e1res$est)
+    lige <- sapply(tvals, function(t) { (fe1res(t+h) - fe1res(t-h))/(2*h) })
+    whichT <- which(!is.na(lige))
+    lige <- lige[whichT]
+    
+    ses <- NULL
+    c <- NULL
+    if (se) {
+        bootout <- list()
+        for (i in 1:length(bootiterlist)) {
+            e1resb <- getRes.CFA(bootiterlist[[i]], E, FALSE)
+            fe1resb <- approxfun(tvals, e1resb$est)
+            ligeb <- sapply(tvals[whichT], function(t) { (fe1resb(t+h) - fe1res(t-h))/(2*h) })
+            ##ligeb <- sapply(2:length(theseT), function(i) { (e1resb$est[theseT[i]] - e1resb$est[theseT[i-1]])/(tvals[theseT[i]]-tvals[theseT[i-1]]) } )
+            bootout[[i]] <- as.matrix(ligeb)
+        }
+        ses <- apply(simplify2array(bootout), c(1,2), sd)
+        ses <- if (nrow(ses)==1) as.numeric(ses) else ses
+        cb <- unlist(lapply(bootout, function(x) { max(abs((x-lige)/ses)) } ))
+        c <- quantile(cb, .95, type=1)
+    }
+    return(CFASE(tvals=tvals[whichT],est=lige, se=ses, c=c))
+}
+
+diff.lige <- function(cfaobj1, cfaobj2, se=T, h) {
+    tvals <- cfaobj1$tvals
+    e1res <- getRes.CFA(cfaobj1, E, se=FALSE)
+    fe1res <- approxfun(tvals, e1res$est)
+    lige1 <- sapply(tvals, function(t) { (fe1res(t+h) - fe1res(t-h))/(2*h) })
+    whichT <- which(!is.na(lige1))
+    lige1 <- lige1[whichT]
+
+    e2res <- getRes.CFA(cfaobj2, E, se=FALSE)
+    fe2res <- approxfun(tvals, e2res$est)
+    lige2 <- sapply(tvals, function(t) { (fe2res(t+h) - fe2res(t-h))/(2*h) })
+    lige2 <- lige2[whichT]
+    
+    bootiterlist1 <- cfaobj1$bootiterlist
+    bootiterlist2 <- cfaobj2$bootiterlist
+    
+    out <- lige1 - lige2
+    ses <- NULL
+    c <- NULL
+    if (se) {
+        bootout <- list()
+        for (i in 1:length(bootiterlist1)) {
+            e1resb <- getRes.CFA(bootiterlist1[[i]], E, FALSE)
+            e2resb <- getRes.CFA(bootiterlist2[[i]], E, FALSE)
+            fe1resb <- approxfun(tvals, e1resb$est)
+            fe2resb <- approxfun(tvals, e2resb$est)
+            lige1b <- sapply(tvals, function(t) { (fe1resb(t+h) - fe1resb(t-h))/(2*h) })
+            lige2b <- sapply(tvals, function(t) { (fe2resb(t+h) - fe2resb(t-h))/(2*h) })
+            lige1b <- lige1b[whichT]
+            lige2b <- lige2b[whichT]
+            bootout[[i]] <- as.matrix(lige1b - lige2b)
+        }
+        ses <- apply(simplify2array(bootout), c(1,2), sd)
+        ses <- if (nrow(ses)==1) as.numeric(ses) else ses
+        cb <- unlist(lapply(bootout, function(x) { max(abs((x-out)/ses)) } ))
+        c <- quantile(cb, .95, type=1)
+    }
+    return(CFASE(tvals=tvals[whichT],est=out, se=ses, c=c))
+}
+
+test.lige <- function(cfaobj, allt, se=T, h) {
+    tvals <- cfaobj$tvals
+    e1res <- getRes.CFA(cfaobj, E, se=FALSE)
+    fe1res <- approxfun(tvals, e1res$est)
+    lige <- sapply(tvals, function(t) { (fe1res(t+h) - fe1res(t-h))/(2*h) })
+    whichT <- which(!is.na(lige))
+    lige <- lige[whichT]
+    
+    bootiterlist <- cfaobj$bootiterlist##lapply(cfaobj$bootiterlist, function(x) { x$distcondt } )
+    tvallist <- cfaobj$tvallist
+    
+    fcondt <- approxfun(tvals[whichT], lige)
+    out <- lige - mean(fcondt(allt), na.rm=TRUE) ## this drops some observations in the extreme tails
+
+    ses <- NULL
+    c <- NULL
+    if (se) {
+        bootout <- list()
+        for (i in 1:length(bootiterlist)) {
+            e1resb <- getRes.CFA(bootiterlist[[i]], E, FALSE)
+            fe1resb <- approxfun(tvals, e1resb$est)
+            ligeb <- sapply(tvals, function(t) { (fe1resb(t+h) - fe1resb(t-h))/(2*h) })
+            ligeb <- ligeb[whichT]
+            bfcondt <- approxfun(tvals[whichT], ligeb)
+            bout <- ligeb - mean(bfcondt(tvallist[[i]]), na.rm=T)
+            bootout[[i]] <- as.matrix(bout)
+        }
+        ses <- apply(simplify2array(bootout), c(1,2), sd)
+        ses <- if (nrow(ses)==1) as.numeric(ses) else ses
+        cb <- unlist(lapply(bootout, function(x) { max(abs((x-out)/ses)) } ))
+        c <- quantile(cb, .95, type=1)
+    }
+    return(CFASE(tvals=tvals[whichT],est=out, se=ses, c=c))
 }
 
 
@@ -380,7 +622,6 @@ ggplot2.CFA <- function(cfaseobj, setype="pointwise", ylim=NULL,
     est <- cfaseobj$est
     se <- cfaseobj$se
     c <- cfaseobj$c
-    library(ggplot2)
     cmat1 <- cbind.data.frame(tvals, est)
     cmat1$which <- "est"
     cmat2 <- cbind.data.frame(tvals, se)

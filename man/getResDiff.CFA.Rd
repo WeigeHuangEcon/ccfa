@@ -7,20 +7,20 @@
 getResDiff.CFA(cfaobj1, cfaobj2, fun, se = T, ...)
 }
 \arguments{
+\item{cfaobj1}{the first CFA object}
+
+\item{cfaobj2}{the second CFA object}
+
 \item{fun}{a function to apply for every value of the treatment in the
 cfaobj}
 
 \item{se}{whether or not to compute standard errors}
 
 \item{...}{can pass additional arguments to fun using this argument}
-
-\item{cfaobj}{a CFA object}
-
-\item{setype}{whether to compute "pointwise" or "uniform" standard errors}
 }
 \value{
 CFASE object
 }
 \description{
-get a particular parameter of interest from a cfa object
+Get the difference between two CFA objects
 }

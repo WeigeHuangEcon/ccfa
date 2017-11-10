@@ -15,8 +15,6 @@ cfaobj}
 \item{se}{whether or not to compute standard errors}
 
 \item{...}{can pass additional arguments to fun using this argument}
-
-\item{setype}{whether to comput "pointwise" or "uniform" standard errors}
 }
 \value{
 CFASE object

@@ -7,8 +7,8 @@
 CFASE(tvals, est, se = NULL, c = NULL)
 }
 \arguments{
-\item{tvals}{the values of the continuous treatment with which
-to compute counterfactuals}
+\item{tvals}{the values of the "treatment" to compute parameters of
+interest for}
 
 \item{est}{the estimate of the parameter at each value of t}
 

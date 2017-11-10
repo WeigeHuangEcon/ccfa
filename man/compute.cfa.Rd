@@ -7,10 +7,12 @@
 compute.cfa(tvals, yvals, data, yname, tname, xnames = NULL, drobj = NULL)
 }
 \arguments{
-\item{tvals}{the values of the continuous treatment with which
-to compute counterfactuals}
+\item{tvals}{the values of the "treatment" to compute parameters of
+interest for}
 
-\item{yvals}{the values to compute the counterfactual distribution fo}
+\item{yvals}{the values to compute the counterfactual distribution for}
+
+\item{data}{the data.frame where y, t, and x are}
 
 \item{yname}{the name of the outcome (y) variable}
 

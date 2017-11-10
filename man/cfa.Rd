@@ -7,20 +7,20 @@
 \alias{cfa-package}
 \title{cfa}
 \usage{
-cfa(tvals, yvals, data, yname, tname, xnames = NULL, drobj = NULL,
-  se = TRUE, iters = 100, cl = 1)
+cfa(formla, xformla = NULL, tvals, yvals, data, drobj = NULL, se = TRUE,
+  iters = 100, cl = 1)
 }
 \arguments{
-\item{tvals}{the values of the continuous treatment with which
-to compute counterfactuals}
+\item{formla}{a formula y ~ treatment}
 
-\item{yvals}{the values to compute the counterfactual distribution fo}
+\item{xformla}{one sided formula for x variables to include, e.g. ~x1 + x2}
 
-\item{yname}{the name of the outcome (y) variable}
+\item{tvals}{the values of the "treatment" to compute parameters of
+interest for}
 
-\item{tname}{the name of the treatment (t) variable}
+\item{yvals}{the values to compute the counterfactual distribution for}
 
-\item{xnames}{the names of additional control variables to include}
+\item{data}{the data.frame where y, t, and x are}
 
 \item{drobj}{optional distribution regression object that has been previously
 computed}
@@ -31,6 +31,12 @@ computed}
 
 \item{cl}{how many clusters to use for parallel computation of standard
 errors}
+
+\item{yname}{the name of the outcome (y) variable}
+
+\item{tname}{the name of the treatment (t) variable}
+
+\item{xnames}{the names of additional control variables to include}
 }
 \value{
 CFA object
@@ -40,4 +46,15 @@ compute counterfactuals using distribution regression
  with a continuous treatment
 
 cfa: A package for computing counterfactuals with a continuous treatment
+}
+\examples{
+data(igm)
+tvals <- seq(10,12,length.out=10)
+yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
+## This line doesn't adjust for any covariates
+cfa(tvals, yvals, igm, "lcfincome", "lfincome", se=FALSE)
+
+## This line adjusts for differences in education
+cfa(tvals, yvals, igm, "lcfincome", "lfincome", "HEDUC", se=FALSE)
+
 }
