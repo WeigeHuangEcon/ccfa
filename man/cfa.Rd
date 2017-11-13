@@ -7,8 +7,9 @@
 \alias{cfa-package}
 \title{cfa}
 \usage{
-cfa(formla, xformla = NULL, tvals, yvals, data, drobj = NULL, se = TRUE,
-  iters = 100, cl = 1)
+cfa(formla, xformla = NULL, tvals, yvals, data, method = "dr",
+  link = "logit", tau = seq(0.01, 0.99, 0.01), condDistobj = NULL,
+  se = TRUE, iters = 100, cl = 1)
 }
 \arguments{
 \item{formla}{a formula y ~ treatment}
@@ -22,8 +23,15 @@ interest for}
 
 \item{data}{the data.frame where y, t, and x are}
 
-\item{drobj}{optional distribution regression object that has been previously
-computed}
+\item{method}{either "dr" or "qr" for distribution regression or quantile regression}
+
+\item{link}{if using distribution regression, any link function that works with the binomial family (e.g. logit (the default), probit, cloglog)}
+
+\item{tau}{if using quantile regression, which values of tau to estimate
+the conditional quantiles}
+
+\item{condDistobj}{optional conditional distribution  object that has
+been previously  computed}
 
 \item{se}{whether or not to compute standard errors using the bootstrap}
 
@@ -31,12 +39,6 @@ computed}
 
 \item{cl}{how many clusters to use for parallel computation of standard
 errors}
-
-\item{yname}{the name of the outcome (y) variable}
-
-\item{tname}{the name of the treatment (t) variable}
-
-\item{xnames}{the names of additional control variables to include}
 }
 \value{
 CFA object
@@ -52,9 +54,11 @@ data(igm)
 tvals <- seq(10,12,length.out=10)
 yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
 ## This line doesn't adjust for any covariates
-cfa(tvals, yvals, igm, "lcfincome", "lfincome", se=FALSE)
+cfa(lcfincome ~ lfincome, tvals=tvals, yvals=yvals, data=igm,
+ se=FALSE)
 
 ## This line adjusts for differences in education
-cfa(tvals, yvals, igm, "lcfincome", "lfincome", "HEDUC", se=FALSE)
+cfa(lcfincome ~ lfincome, ~HEDUC, tvals=tvals, yvals=yvals, data=igm,
+ se=FALSE)
 
 }

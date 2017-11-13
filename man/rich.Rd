@@ -17,4 +17,3 @@ scalar fraction that are "rich"
 \description{
 compute fraction of "rich"
 }
-\keyword{internal}

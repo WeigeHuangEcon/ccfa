@@ -15,4 +15,3 @@ scalar expected value
 \description{
 compute expectations from ecdf object
 }
-\keyword{internal}

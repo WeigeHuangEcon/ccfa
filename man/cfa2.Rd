@@ -4,10 +4,14 @@
 \alias{cfa2}
 \title{cfa2}
 \usage{
-cfa2(tvals, yvals, data, yname, tname, xnames1 = NULL, drobj1 = NULL,
-  xnames2 = NULL, drobj2 = NULL, se = TRUE, iters = 100, cl = 1)
+cfa2(formla, tvals, yvals, data, xformla1 = NULL, method1 = "dr",
+  link1 = "logit", tau1 = seq(0.01, 0.99, 0.01), condDistobj1 = NULL,
+  xformla2 = NULL, method2 = "dr", link2 = "logit", tau2 = seq(0.01,
+  0.99, 0.01), condDistobj2 = NULL, se = TRUE, iters = 100, cl = 1)
 }
 \arguments{
+\item{formla}{a formula y ~ treatment}
+
 \item{tvals}{the values of the "treatment" to compute parameters of
 interest for}
 
@@ -15,17 +19,33 @@ interest for}
 
 \item{data}{the data.frame where y, t, and x are}
 
-\item{yname}{the name of the outcome (y) variable}
+\item{xformla1}{an optional formula for the first set of x variables}
 
-\item{tname}{the name of the treatment (t) variable}
+\item{method1}{the first method for estimating the conditional distribution
+it can be "dr" for distribution regression or "qr" for quantile regression}
 
-\item{xnames1}{the first set of x variables}
+\item{link1}{if using distribution regression, set the link variable.  It
+can be any link function accepted by glm, e.g. logit, probit, cloglog}
 
-\item{drobj1}{the first distribution regression object, optional}
+\item{tau1}{if using quantile regression, the values of tau to use, the
+default is seq(.01,.99,.01)}
 
-\item{xnames2}{the second set of x variables}
+\item{condDistobj1}{if have already calculated a conditional distribution
+object outside of the model, can set it here}
 
-\item{drobj2}{the second distribution regression object, optional}
+\item{xformla2}{an optional formula for the second set of x variables}
+
+\item{method2}{the second method for estimating the conditional distribution
+it can be "dr" for distribution regression or "qr" for quantile regression}
+
+\item{link2}{if using distribution regression, set the link variable.  It
+can be any link function accepted by glm, e.g. logit, probit, cloglog}
+
+\item{tau2}{if using quantile regression, the values of tau to use, the
+default is seq(.01,.99,.01)}
+
+\item{condDistobj2}{if have already calculated a conditional distribution
+object outside of the model, can set it here}
 
 \item{se}{whether or not to compute standard errors using the bootstrap}
 

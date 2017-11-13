@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>compute.cfa — compute.cfa • cfa</title>
+<title>cfa.inner — cfa.inner • cfa</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -78,14 +78,19 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>compute.cfa</h1>
+    <h1>cfa.inner</h1>
     </div>
 
     
-    <p>does the heavy lifting for computing cfa results</p>
+    <p>calls function to compute counterfactuals</p>
+<p>calls function to compute counterfactuals</p>
     
 
-    <pre class="usage"><span class='fu'>compute.cfa</span>(<span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>data</span>, <span class='no'>yname</span>, <span class='no'>tname</span>, <span class='kw'>xnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>drobj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>cfa.inner</span>(<span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>data</span>, <span class='no'>yname</span>, <span class='no'>tname</span>, <span class='kw'>xnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>drobj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>cl</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+
+<span class='fu'>cfa.inner</span>(<span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>data</span>, <span class='no'>yname</span>, <span class='no'>tname</span>, <span class='kw'>xnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>drobj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>cl</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -120,11 +125,37 @@ interest for</p></td>
       <td><p>optional distribution regression object that has been previously
 computed</p></td>
     </tr>
+    <tr>
+      <th>se</th>
+      <td><p>whether or not to compute standard errors using the bootstrap</p></td>
+    </tr>
+    <tr>
+      <th>iters</th>
+      <td><p>how many bootstrap iterations to use</p></td>
+    </tr>
+    <tr>
+      <th>cl</th>
+      <td><p>how many clusters to use for parallel computation of standard
+errors</p></td>
+    </tr>
+    <tr>
+      <th>yname</th>
+      <td><p>the name of the outcome (y) variable</p></td>
+    </tr>
+    <tr>
+      <th>tname</th>
+      <td><p>the name of the treatment (t) variable</p></td>
+    </tr>
+    <tr>
+      <th>xnames</th>
+      <td><p>the names of additional control variables to include</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>CFA object</p>
+<p>CFA object</p>
     
 
   </div>

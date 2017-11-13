@@ -6,4 +6,7 @@ utils::globalVariables(c("k","v"))
 #' @import stats
 #' @import ggplot2
 #' @import utils
+#' @import BMisc
+#' @import quantreg
+#' @import TempleMetrics
 NULL

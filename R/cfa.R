@@ -1,33 +1,33 @@
-#' @title compute.cfa
-#'
-#' @description does the heavy lifting for computing cfa results
-#' @inheritParams cfa
-#'
-#' @return CFA object
-#' @keywords internal
-#'
-#' @export
-compute.cfa <- function(tvals, yvals, data, yname, tname, xnames=NULL, drobj=NULL) {
-    xmat <- data[,xnames]
-    if (is.null(drobj)) {
-        formla <- as.formula(paste0(yname,"~",tname))
-        formla <- addCovToFormla(xnames, formla)
-        drobj <- distreg(formla, data, yvals)
-    }
+## #' @title compute.cfa
+## #'
+## #' @description does the heavy lifting for computing cfa results
+## #' @inheritParams cfa
+## #'
+## #' @return CFA object
+## #' @keywords internal
+## #'
+## #' @export
+## compute.cfa <- function(tvals, yvals, data, yname, tname, xnames=NULL, drobj=NULL) {
+##     xmat <- data[,xnames]
+##     if (is.null(drobj)) {
+##         formla <- as.formula(paste0(yname,"~",tname))
+##         formla <- addCovToFormla(xnames, formla)
+##         drobj <- distreg(formla, data, yvals)
+##     }
 
-    coef <- t(sapply(drobj$glmlist, coef))
+##     coef <- t(sapply(drobj$glmlist, coef))
     
-    out <- list()
+##     out <- list()
     
-    for (i in 1:length(tvals)) {
-        xmat1 <- cbind.data.frame(tvals[i], xmat)
-        thisdist <- unlist(lapply(lapply(yvals, predict.DR, drobj=drobj, xdf=xmat1), mean))
-        out[[i]] <- BMisc::makeDist(yvals, thisdist, rearrange=TRUE)##pred(tvals[i], drobj=drobj, yvals=yvals, xmat=xmat1)
-    }
+##     for (i in 1:length(tvals)) {
+##         xmat1 <- cbind.data.frame(tvals[i], xmat)
+##         thisdist <- unlist(lapply(lapply(yvals, predict.DR, drobj=drobj, xdf=xmat1), mean))
+##         out[[i]] <- BMisc::makeDist(yvals, thisdist, rearrange=TRUE)##pred(tvals[i], drobj=drobj, yvals=yvals, xmat=xmat1)
+##     }
 
-    return(CFA.OBJ(tvals, out, coef=coef))
+##     return(CFA.OBJ(tvals, out, coef=coef))
 
-}
+## }
 
 #' @title compute.cfa2
 #'
@@ -133,15 +133,12 @@ cfa.inner <- function(tvals, yvals, data, yname, tname, xnames=NULL,
 #'  interest for
 #' @param yvals the values to compute the counterfactual distribution for
 #' @param data the data.frame where y, t, and x are
-#' @param yname the name of the outcome (y) variable
-#' @param tname the name of the treatment (t) variable
-#' @param xnames the names of additional control variables to include
 #' @param method either "dr" or "qr" for distribution regression or quantile regression
 #' @param link if using distribution regression, any link function that works with the binomial family (e.g. logit (the default), probit, cloglog)
 #' @param tau if using quantile regression, which values of tau to estimate
 #'  the conditional quantiles
-#' @param drobj optional distribution regression object that has been previously
-#'  computed
+#' @param condDistobj optional conditional distribution  object that has
+#'  been previously  computed
 #' @param se whether or not to compute standard errors using the bootstrap
 #' @param iters how many bootstrap iterations to use
 #' @param cl how many clusters to use for parallel computation of standard
@@ -154,10 +151,12 @@ cfa.inner <- function(tvals, yvals, data, yname, tname, xnames=NULL,
 #' tvals <- seq(10,12,length.out=10)
 #' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
 #' ## This line doesn't adjust for any covariates
-#' cfa(tvals, yvals, igm, "lcfincome", "lfincome", se=FALSE)
+#' cfa(lcfincome ~ lfincome, tvals=tvals, yvals=yvals, data=igm,
+#'  se=FALSE)
 #'
 #' ## This line adjusts for differences in education
-#' cfa(tvals, yvals, igm, "lcfincome", "lfincome", "HEDUC", se=FALSE)
+#' cfa(lcfincome ~ lfincome, ~HEDUC, tvals=tvals, yvals=yvals, data=igm,
+#'  se=FALSE)
 #' 
 #' @export
 cfa <- function(formla, xformla=NULL, tvals, yvals, data,
@@ -352,10 +351,24 @@ getCoef.CFA <- function(cfaobj, yvals, se=T,  ...) {
 #'  same time which allows one to conduct inference on their difference
 #'
 #' @inheritParams cfa
-#' @param xnames1 the first set of x variables
-#' @param xnames2 the second set of x variables
-#' @param drobj1 the first distribution regression object, optional
-#' @param drobj2 the second distribution regression object, optional
+#' @param xformla1 an optional formula for the first set of x variables
+#' @param method1 the first method for estimating the conditional distribution
+#'  it can be "dr" for distribution regression or "qr" for quantile regression
+#' @param link1 if using distribution regression, set the link variable.  It
+#'  can be any link function accepted by glm, e.g. logit, probit, cloglog
+#' @param tau1 if using quantile regression, the values of tau to use, the
+#'  default is seq(.01,.99,.01)
+#' @param condDistobj1 if have already calculated a conditional distribution
+#'  object outside of the model, can set it here
+#' @param xformla2 an optional formula for the second set of x variables
+#' @param method2 the second method for estimating the conditional distribution
+#'  it can be "dr" for distribution regression or "qr" for quantile regression
+#' @param link2 if using distribution regression, set the link variable.  It
+#'  can be any link function accepted by glm, e.g. logit, probit, cloglog
+#' @param tau2 if using quantile regression, the values of tau to use, the
+#'  default is seq(.01,.99,.01)
+#' @param condDistobj2 if have already calculated a conditional distribution
+#'  object outside of the model, can set it here
 #'
 #' @return list of two CFA objects
 #'

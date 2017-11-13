@@ -13,5 +13,7 @@ Imports: quantreg,
     pbapply,
     BMisc,
     tidyr,
-    ggplot2
+    ggplot2,
+    TempleMetrics
 RoxygenNote: 6.0.1
+

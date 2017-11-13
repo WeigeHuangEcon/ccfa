@@ -17,4 +17,3 @@ scalar fraction below poverty line
 \description{
 compute fraction below the poverty line from ecdf
 }
-\keyword{internal}

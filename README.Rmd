@@ -14,21 +14,47 @@ knitr::opts_chunk$set(
 
 # cfa
 
-The goal of cfa is to ...
+The cfa package contains methods for computing counterfactuals with a continuous treatment variable.  In particular, the package can be used to calculate the expected value, the variance, the interquantile range, the fraction of observations below or above a particular cutoff, or other user-supplied functions of an outcome of interest conditional on a continuous treatment.  The package can also be used for computing these same functionals after adjusting for differences in covariates at different values of the treatment.  Further, one can use the package to conduct uniform inference for each parameter of interest across all values of the treatment, uniformly test whether adjusting for covariates makes a difference at any value of the treatment, and test whether a parameter of interest is different from its average value at an value of the treatment.
 
 ## Installation
 
 You can install cfa from github with:
 
-```{r gh-installation, eval = FALSE}
+```{r gh-installation}
 # install.packages("devtools")
 devtools::install_github("WeigeHuangEcon/cfa")
 ```
+or from CRAN using
+```{r eval=FALSE}
+install.packages("cfa")
+```
 
-## Example
+## Usage
 
-This is a basic example which shows you how to solve a common problem:
+The following example shows how to estimate the counterfactual distribution of child's income as a function of parent's income, as well as some additional parameters that depend on this distribution.
 
 ```{r example}
-## basic example code
+library(cfa)
+data(igm)
+tvals <- seq(10,12,length.out=10)
+yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
+## This line doesn't adjust for any covariates
+obs.dist <- cfa(lcfincome ~ lfincome, tvals=tvals, yvals=yvals, data=igm, se=FALSE)
+
+## This line adjusts for differences in education
+cf.dist <- cfa(lcfincome ~ lfincome, ~HEDUC, tvals=tvals, yvals=yvals, data=igm, se=FALSE)
+class(cf.dist)
+attributes(cf.dist)
+```
+
+The objects that are returned from the `cfa` method are (most of the time) too complicated to directly understand, as they are distribution function for every value of $t$.  Instead, the `getRes.CFA` method can be used to obtain particular results from a CFA object.  Here is an example
+```{r}
+cf.e <- getRes.CFA(cf.dist, fun=E, se=T)
+```
+
+The parameter `fun` in the `getRes.CFA` function accepts any function that can be applied to a distribution function and return a single number (additional parameters that the function needs can be passed through the `...` argument).  In the example above, `E` is computes the expectation given a distribution function -- this function is supplied in the package.  Besides `E`, functions for computing the variance, inter-quantile range, the fraction of individuals below the poverty line, and the fraction of individuals who are "rich" -- these are called `Var`, `IQR`, `pov`, and `rich`.  But other custom functions could be developed by users.
+
+These types of results are simple to plot as function of $t$.  The `cfa` packages implements plotting mechanisms using `ggplot2`.
+```{r}
+ggplot2.CFA(cf.e)
 ```

@@ -19,4 +19,3 @@ scalar interquantile range
 \description{
 compute interquantile range from ecdf object
 }
-\keyword{internal}

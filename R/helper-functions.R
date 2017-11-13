@@ -6,7 +6,6 @@
 #'
 #' @return scalar expected value
 #'
-#' @keywords internal
 #'
 #' @export
 E <- function(edf) {
@@ -23,7 +22,6 @@ E <- function(edf) {
 #'
 #' @return scalar variance
 #'
-#' @keywords internal
 #'
 #' @export
 Var <- function(edf) {
@@ -43,7 +41,6 @@ Var <- function(edf) {
 #'
 #' @return scalar interquantile range
 #'
-#' @keywords internal
 #'
 #' @export
 IQR <- function(edf, t1, t2) {
@@ -59,8 +56,6 @@ IQR <- function(edf, t1, t2) {
 #'
 #' @return scalar fraction below poverty line
 #'
-#' @keywords internal
-#'
 #' @export
 pov <- function(edf, povline) {
     edf(povline)
@@ -74,8 +69,6 @@ pov <- function(edf, povline) {
 #' @param richline the cutoff for being rich
 #'
 #' @return scalar fraction that are "rich"
-#'
-#' @keywords internal
 #'
 #' @export
 rich <- function(edf, richline) {

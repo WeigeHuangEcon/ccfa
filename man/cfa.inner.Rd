@@ -4,7 +4,8 @@
 \alias{cfa.inner}
 \title{cfa.inner}
 \usage{
-cfa.inner(tvals, yvals, data, yname, tname, xnames = NULL, drobj = NULL,
+cfa.inner(tvals, yvals, data, yname, tname, xnames = NULL, method = "dr",
+  link = "logit", tau = seq(0.01, 0.99, 0.01), condDistobj = NULL,
   se = TRUE, iters = 100, cl = 1)
 }
 \arguments{
@@ -21,8 +22,15 @@ interest for}
 
 \item{xnames}{the names of additional control variables to include}
 
-\item{drobj}{optional distribution regression object that has been previously
-computed}
+\item{method}{either "dr" or "qr" for distribution regression or quantile regression}
+
+\item{link}{if using distribution regression, any link function that works with the binomial family (e.g. logit (the default), probit, cloglog)}
+
+\item{tau}{if using quantile regression, which values of tau to estimate
+the conditional quantiles}
+
+\item{condDistobj}{optional conditional distribution  object that has
+been previously  computed}
 
 \item{se}{whether or not to compute standard errors using the bootstrap}
 

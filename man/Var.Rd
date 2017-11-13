@@ -15,4 +15,3 @@ scalar variance
 \description{
 compute variance from ecdf object
 }
-\keyword{internal}
