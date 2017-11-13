@@ -61,19 +61,53 @@
 <div id="cfa" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#cfa" class="anchor"></a>cfa</h1></div>
-<p>The goal of cfa is to …</p>
+<p>The cfa package contains methods for computing counterfactuals with a continuous treatment variable. In particular, the package can be used to calculate the expected value, the variance, the interquantile range, the fraction of observations below or above a particular cutoff, or other user-supplied functions of an outcome of interest conditional on a continuous treatment. The package can also be used for computing these same functionals after adjusting for differences in covariates at different values of the treatment. Further, one can use the package to conduct uniform inference for each parameter of interest across all values of the treatment, uniformly test whether adjusting for covariates makes a difference at any value of the treatment, and test whether a parameter of interest is different from its average value at an value of the treatment.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install cfa from github with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools::<span class="kw">install_github</span>(<span class="st">"WeigeHuangEcon/cfa"</span>)</code></pre></div>
+devtools::<span class="kw">install_github</span>(<span class="st">"WeigeHuangEcon/cfa"</span>)
+<span class="co">#&gt; Skipping install of 'cfa' from a github remote, the SHA1 (c5296cc5) has not changed since last install.</span>
+<span class="co">#&gt;   Use `force = TRUE` to force installation</span></code></pre></div>
+<p>or from CRAN using</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"cfa"</span>)</code></pre></div>
 </div>
-<div id="example" class="section level2">
+<div id="usage" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## basic example code</code></pre></div>
+<a href="#usage" class="anchor"></a>Usage</h2>
+<p>The following example shows how to estimate the counterfactual distribution of child’s income as a function of parent’s income, as well as some additional parameters that depend on this distribution.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(cfa)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'cfa'</span>
+<span class="co">#&gt; The following object is masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     IQR</span>
+<span class="kw">data</span>(igm)
+tvals &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">10</span>,<span class="dv">12</span>,<span class="dt">length.out=</span><span class="dv">10</span>)
+yvals &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">quantile</span>(igm$lcfincome, .<span class="dv">05</span>), <span class="kw">quantile</span>(igm$lcfincome, .<span class="dv">95</span>), <span class="dt">length.out=</span><span class="dv">50</span>)
+## This line doesn't adjust for any covariates
+obs.dist &lt;-<span class="st"> </span><span class="kw">cfa</span>(lcfincome ~<span class="st"> </span>lfincome, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">data=</span>igm, <span class="dt">iters=</span><span class="dv">25</span>)
+<span class="co">#&gt; boostrapping standard errors...</span>
+
+## This line adjusts for differences in education
+cf.dist &lt;-<span class="st"> </span><span class="kw">cfa</span>(lcfincome ~<span class="st"> </span>lfincome, ~HEDUC, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">data=</span>igm, <span class="dt">iters=</span><span class="dv">25</span>)
+<span class="co">#&gt; boostrapping standard errors...</span>
+<span class="kw">class</span>(cf.dist)
+<span class="co">#&gt; [1] "CFA"</span>
+<span class="kw">attributes</span>(cf.dist)
+<span class="co">#&gt; $names</span>
+<span class="co">#&gt; [1] "tvals"        "distcondt"    "bootiterlist" "tvallist"    </span>
+<span class="co">#&gt; [5] "coef"        </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $class</span>
+<span class="co">#&gt; [1] "CFA"</span></code></pre></div>
+<p>The objects that are returned from the <code>cfa</code> method are (most of the time) too complicated to directly understand, as they are distribution function for every value of <span class="math inline">\(t\)</span>. Instead, the <code>getRes.CFA</code> method can be used to obtain particular results from a CFA object. Here is an example</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cf.e &lt;-<span class="st"> </span><span class="kw"><a href="reference/getRes.CFA.html">getRes.CFA</a></span>(cf.dist, <span class="dt">fun=</span>E, <span class="dt">se=</span>T)</code></pre></div>
+<p>The parameter <code>fun</code> in the <code>getRes.CFA</code> function accepts any function that can be applied to a distribution function and return a single number (additional parameters that the function needs can be passed through the <code>...</code> argument). In the example above, <code>E</code> is computes the expectation given a distribution function – this function is supplied in the package. Besides <code>E</code>, functions for computing the variance, inter-quantile range, the fraction of individuals below the poverty line, and the fraction of individuals who are “rich” – these are called <code>Var</code>, <code>IQR</code>, <code>pov</code>, and <code>rich</code>. But other custom functions could be developed by users.</p>
+<p>These types of results are simple to plot as function of <span class="math inline">\(t\)</span>. The <code>cfa</code> packages implements plotting mechanisms using <code>ggplot2</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/ggplot2.CFA.html">ggplot2.CFA</a></span>(cf.e)</code></pre></div>
+<p><img src="README-unnamed-chunk-4-1.png" width="672"></p>
 </div>
 </div>
 </div>

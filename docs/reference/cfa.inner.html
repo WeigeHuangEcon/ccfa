@@ -83,13 +83,10 @@
 
     
     <p>calls function to compute counterfactuals</p>
-<p>calls function to compute counterfactuals</p>
     
 
-    <pre class="usage"><span class='fu'>cfa.inner</span>(<span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>data</span>, <span class='no'>yname</span>, <span class='no'>tname</span>, <span class='kw'>xnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>drobj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>cl</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-
-<span class='fu'>cfa.inner</span>(<span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>data</span>, <span class='no'>yname</span>, <span class='no'>tname</span>, <span class='kw'>xnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>drobj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>cfa.inner</span>(<span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>data</span>, <span class='no'>yname</span>, <span class='no'>tname</span>, <span class='kw'>xnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"dr"</span>,
+  <span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>, <span class='kw'>tau</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0.01</span>, <span class='fl'>0.99</span>, <span class='fl'>0.01</span>), <span class='kw'>condDistobj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>cl</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -121,9 +118,22 @@ interest for</p></td>
       <td><p>the names of additional control variables to include</p></td>
     </tr>
     <tr>
-      <th>drobj</th>
-      <td><p>optional distribution regression object that has been previously
-computed</p></td>
+      <th>method</th>
+      <td><p>either "dr" or "qr" for distribution regression or quantile regression</p></td>
+    </tr>
+    <tr>
+      <th>link</th>
+      <td><p>if using distribution regression, any link function that works with the binomial family (e.g. logit (the default), probit, cloglog)</p></td>
+    </tr>
+    <tr>
+      <th>tau</th>
+      <td><p>if using quantile regression, which values of tau to estimate
+the conditional quantiles</p></td>
+    </tr>
+    <tr>
+      <th>condDistobj</th>
+      <td><p>optional conditional distribution  object that has
+been previously  computed</p></td>
     </tr>
     <tr>
       <th>se</th>
@@ -138,24 +148,11 @@ computed</p></td>
       <td><p>how many clusters to use for parallel computation of standard
 errors</p></td>
     </tr>
-    <tr>
-      <th>yname</th>
-      <td><p>the name of the outcome (y) variable</p></td>
-    </tr>
-    <tr>
-      <th>tname</th>
-      <td><p>the name of the treatment (t) variable</p></td>
-    </tr>
-    <tr>
-      <th>xnames</th>
-      <td><p>the names of additional control variables to include</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>CFA object</p>
-<p>CFA object</p>
     
 
   </div>

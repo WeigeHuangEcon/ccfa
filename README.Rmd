@@ -39,10 +39,10 @@ data(igm)
 tvals <- seq(10,12,length.out=10)
 yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
 ## This line doesn't adjust for any covariates
-obs.dist <- cfa(lcfincome ~ lfincome, tvals=tvals, yvals=yvals, data=igm, se=FALSE)
+obs.dist <- cfa(lcfincome ~ lfincome, tvals=tvals, yvals=yvals, data=igm, iters=25)
 
 ## This line adjusts for differences in education
-cf.dist <- cfa(lcfincome ~ lfincome, ~HEDUC, tvals=tvals, yvals=yvals, data=igm, se=FALSE)
+cf.dist <- cfa(lcfincome ~ lfincome, ~HEDUC, tvals=tvals, yvals=yvals, data=igm, iters=25)
 class(cf.dist)
 attributes(cf.dist)
 ```

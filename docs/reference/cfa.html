@@ -84,16 +84,12 @@
     
     <p>compute counterfactuals using distribution regression
  with a continuous treatment</p>
-<p>compute counterfactuals using distribution regression
- with a continuous treatment</p>
 <p>cfa: A package for computing counterfactuals with a continuous treatment</p>
     
 
-    <pre class="usage"><span class='fu'>cfa</span>(<span class='no'>formla</span>, <span class='kw'>xformla</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>data</span>, <span class='kw'>drobj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>cl</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-
-<span class='fu'>cfa</span>(<span class='no'>formla</span>, <span class='kw'>xformla</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>data</span>, <span class='kw'>drobj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>cl</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre class="usage"><span class='fu'>cfa</span>(<span class='no'>formla</span>, <span class='kw'>xformla</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>data</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"dr"</span>,
+  <span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>, <span class='kw'>tau</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0.01</span>, <span class='fl'>0.99</span>, <span class='fl'>0.01</span>), <span class='kw'>condDistobj</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>cl</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -120,36 +116,6 @@ interest for</p></td>
       <td><p>the data.frame where y, t, and x are</p></td>
     </tr>
     <tr>
-      <th>drobj</th>
-      <td><p>optional distribution regression object that has been previously
-computed</p></td>
-    </tr>
-    <tr>
-      <th>se</th>
-      <td><p>whether or not to compute standard errors using the bootstrap</p></td>
-    </tr>
-    <tr>
-      <th>iters</th>
-      <td><p>how many bootstrap iterations to use</p></td>
-    </tr>
-    <tr>
-      <th>cl</th>
-      <td><p>how many clusters to use for parallel computation of standard
-errors</p></td>
-    </tr>
-    <tr>
-      <th>yname</th>
-      <td><p>the name of the outcome (y) variable</p></td>
-    </tr>
-    <tr>
-      <th>tname</th>
-      <td><p>the name of the treatment (t) variable</p></td>
-    </tr>
-    <tr>
-      <th>xnames</th>
-      <td><p>the names of additional control variables to include</p></td>
-    </tr>
-    <tr>
       <th>method</th>
       <td><p>either "dr" or "qr" for distribution regression or quantile regression</p></td>
     </tr>
@@ -163,42 +129,9 @@ errors</p></td>
 the conditional quantiles</p></td>
     </tr>
     <tr>
-      <th>formla</th>
-      <td><p>a formula y ~ treatment</p></td>
-    </tr>
-    <tr>
-      <th>xformla</th>
-      <td><p>one sided formula for x variables to include, e.g. ~x1 + x2</p></td>
-    </tr>
-    <tr>
-      <th>tvals</th>
-      <td><p>the values of the "treatment" to compute parameters of
-interest for</p></td>
-    </tr>
-    <tr>
-      <th>yvals</th>
-      <td><p>the values to compute the counterfactual distribution for</p></td>
-    </tr>
-    <tr>
-      <th>data</th>
-      <td><p>the data.frame where y, t, and x are</p></td>
-    </tr>
-    <tr>
-      <th>yname</th>
-      <td><p>the name of the outcome (y) variable</p></td>
-    </tr>
-    <tr>
-      <th>tname</th>
-      <td><p>the name of the treatment (t) variable</p></td>
-    </tr>
-    <tr>
-      <th>xnames</th>
-      <td><p>the names of additional control variables to include</p></td>
-    </tr>
-    <tr>
-      <th>drobj</th>
-      <td><p>optional distribution regression object that has been previously
-computed</p></td>
+      <th>condDistobj</th>
+      <td><p>optional conditional distribution  object that has
+been previously  computed</p></td>
     </tr>
     <tr>
       <th>se</th>
@@ -218,7 +151,6 @@ errors</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>CFA object</p>
-<p>CFA object</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -226,17 +158,12 @@ errors</p></td>
 <span class='no'>tvals</span> <span class='kw'>&lt;-</span> <span class='fu'>seq</span>(<span class='fl'>10</span>,<span class='fl'>12</span>,<span class='kw'>length.out</span><span class='kw'>=</span><span class='fl'>10</span>)
 <span class='no'>yvals</span> <span class='kw'>&lt;-</span> <span class='fu'>seq</span>(<span class='fu'>quantile</span>(<span class='no'>igm</span>$<span class='no'>lcfincome</span>, <span class='fl'>.05</span>), <span class='fu'>quantile</span>(<span class='no'>igm</span>$<span class='no'>lcfincome</span>, <span class='fl'>.95</span>), <span class='kw'>length.out</span><span class='kw'>=</span><span class='fl'>50</span>)
 <span class='co'>## This line doesn't adjust for any covariates</span>
-<span class='fu'>cfa</span>(<span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>igm</span>, <span class='st'>"lcfincome"</span>, <span class='st'>"lfincome"</span>, <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in formula.default(object, env = baseenv()): invalid formula</span></div><div class='input'>
+<span class='fu'>cfa</span>(<span class='no'>lcfincome</span> ~ <span class='no'>lfincome</span>, <span class='kw'>tvals</span><span class='kw'>=</span><span class='no'>tvals</span>, <span class='kw'>yvals</span><span class='kw'>=</span><span class='no'>yvals</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>igm</span>,
+ <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+
 <span class='co'>## This line adjusts for differences in education</span>
-<span class='fu'>cfa</span>(<span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>igm</span>, <span class='st'>"lcfincome"</span>, <span class='st'>"lfincome"</span>, <span class='st'>"HEDUC"</span>, <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in formula.default(object, env = baseenv()): invalid formula</span></div><div class='input'>
-<span class='fu'>data</span>(<span class='no'>igm</span>)
-<span class='no'>tvals</span> <span class='kw'>&lt;-</span> <span class='fu'>seq</span>(<span class='fl'>10</span>,<span class='fl'>12</span>,<span class='kw'>length.out</span><span class='kw'>=</span><span class='fl'>10</span>)
-<span class='no'>yvals</span> <span class='kw'>&lt;-</span> <span class='fu'>seq</span>(<span class='fu'>quantile</span>(<span class='no'>igm</span>$<span class='no'>lcfincome</span>, <span class='fl'>.05</span>), <span class='fu'>quantile</span>(<span class='no'>igm</span>$<span class='no'>lcfincome</span>, <span class='fl'>.95</span>), <span class='kw'>length.out</span><span class='kw'>=</span><span class='fl'>50</span>)
-<span class='co'>## This line doesn't adjust for any covariates</span>
-<span class='fu'>cfa</span>(<span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>igm</span>, <span class='st'>"lcfincome"</span>, <span class='st'>"lfincome"</span>, <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in formula.default(object, env = baseenv()): invalid formula</span></div><div class='input'>
-<span class='co'>## This line adjusts for differences in education</span>
-<span class='fu'>cfa</span>(<span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>igm</span>, <span class='st'>"lcfincome"</span>, <span class='st'>"lfincome"</span>, <span class='st'>"HEDUC"</span>, <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in formula.default(object, env = baseenv()): invalid formula</span></div><div class='input'>
-</div></pre>
+<span class='fu'>cfa</span>(<span class='no'>lcfincome</span> ~ <span class='no'>lfincome</span>, ~<span class='no'>HEDUC</span>, <span class='kw'>tvals</span><span class='kw'>=</span><span class='no'>tvals</span>, <span class='kw'>yvals</span><span class='kw'>=</span><span class='no'>yvals</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>igm</span>,
+ <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

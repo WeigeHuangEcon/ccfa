@@ -1,6 +1,3 @@
-# cfa 0.1.0
+#cfa 1.0.0
 
-* Added a `NEWS.md` file to track changes to the package.
-
-
-
+  * Initial version, code for computing counterfactual distributions and functions of counterfactual distributions

@@ -112,6 +112,54 @@ interest for</p></td>
       <td><p>the data.frame where y, t, and x are</p></td>
     </tr>
     <tr>
+      <th>xformla1</th>
+      <td><p>an optional formula for the first set of x variables</p></td>
+    </tr>
+    <tr>
+      <th>method1</th>
+      <td><p>the first method for estimating the conditional distribution
+it can be "dr" for distribution regression or "qr" for quantile regression</p></td>
+    </tr>
+    <tr>
+      <th>link1</th>
+      <td><p>if using distribution regression, set the link variable.  It
+can be any link function accepted by glm, e.g. logit, probit, cloglog</p></td>
+    </tr>
+    <tr>
+      <th>tau1</th>
+      <td><p>if using quantile regression, the values of tau to use, the
+default is seq(.01,.99,.01)</p></td>
+    </tr>
+    <tr>
+      <th>condDistobj1</th>
+      <td><p>if have already calculated a conditional distribution
+object outside of the model, can set it here</p></td>
+    </tr>
+    <tr>
+      <th>xformla2</th>
+      <td><p>an optional formula for the second set of x variables</p></td>
+    </tr>
+    <tr>
+      <th>method2</th>
+      <td><p>the second method for estimating the conditional distribution
+it can be "dr" for distribution regression or "qr" for quantile regression</p></td>
+    </tr>
+    <tr>
+      <th>link2</th>
+      <td><p>if using distribution regression, set the link variable.  It
+can be any link function accepted by glm, e.g. logit, probit, cloglog</p></td>
+    </tr>
+    <tr>
+      <th>tau2</th>
+      <td><p>if using quantile regression, the values of tau to use, the
+default is seq(.01,.99,.01)</p></td>
+    </tr>
+    <tr>
+      <th>condDistobj2</th>
+      <td><p>if have already calculated a conditional distribution
+object outside of the model, can set it here</p></td>
+    </tr>
+    <tr>
       <th>se</th>
       <td><p>whether or not to compute standard errors using the bootstrap</p></td>
     </tr>
@@ -123,22 +171,6 @@ interest for</p></td>
       <th>cl</th>
       <td><p>how many clusters to use for parallel computation of standard
 errors</p></td>
-    </tr>
-    <tr>
-      <th>xnames1</th>
-      <td><p>the first set of x variables</p></td>
-    </tr>
-    <tr>
-      <th>xnames2</th>
-      <td><p>the second set of x variables</p></td>
-    </tr>
-    <tr>
-      <th>drobj1</th>
-      <td><p>the first distribution regression object, optional</p></td>
-    </tr>
-    <tr>
-      <th>drobj2</th>
-      <td><p>the second distribution regression object, optional</p></td>
     </tr>
     </table>
     
