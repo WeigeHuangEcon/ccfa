@@ -159,11 +159,11 @@ errors</p></td>
 <span class='no'>yvals</span> <span class='kw'>&lt;-</span> <span class='fu'>seq</span>(<span class='fu'>quantile</span>(<span class='no'>igm</span>$<span class='no'>lcfincome</span>, <span class='fl'>.05</span>), <span class='fu'>quantile</span>(<span class='no'>igm</span>$<span class='no'>lcfincome</span>, <span class='fl'>.95</span>), <span class='kw'>length.out</span><span class='kw'>=</span><span class='fl'>50</span>)
 <span class='co'>## This line doesn't adjust for any covariates</span>
 <span class='fu'>cfa</span>(<span class='no'>lcfincome</span> ~ <span class='no'>lfincome</span>, <span class='kw'>tvals</span><span class='kw'>=</span><span class='no'>tvals</span>, <span class='kw'>yvals</span><span class='kw'>=</span><span class='no'>yvals</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>igm</span>,
- <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-
+ <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in `[.data.frame`(data, , yname): undefined columns selected</span></div><div class='input'>
 <span class='co'>## This line adjusts for differences in education</span>
 <span class='fu'>cfa</span>(<span class='no'>lcfincome</span> ~ <span class='no'>lfincome</span>, ~<span class='no'>HEDUC</span>, <span class='kw'>tvals</span><span class='kw'>=</span><span class='no'>tvals</span>, <span class='kw'>yvals</span><span class='kw'>=</span><span class='no'>yvals</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>igm</span>,
- <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div></pre>
+ <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in `[.data.frame`(data, , yname): undefined columns selected</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

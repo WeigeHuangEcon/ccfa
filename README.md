@@ -13,8 +13,69 @@ You can install cfa from github with:
 ``` r
 # install.packages("devtools")
 devtools::install_github("WeigeHuangEcon/cfa")
-#> Skipping install of 'cfa' from a github remote, the SHA1 (c5296cc5) has not changed since last install.
+#> Downloading GitHub repo WeigeHuangEcon/cfa@master
+#> from URL https://api.github.com/repos/WeigeHuangEcon/cfa/zipball/master
+#> Installing cfa
+#> Installing tidyr
+#> Installing dplyr
+#> Installing BH
+#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
+#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc62a95ca9/BH'  \
+#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
+#>   --install-tests
+#> 
+#> Installing glue
+#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
+#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc69d7f96a/glue'  \
+#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
+#>   --install-tests
+#> 
+#> Installing Rcpp
+#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
+#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc21b03cba/Rcpp'  \
+#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
+#>   --install-tests
+#> 
+#> Installing rlang
+#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
+#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc2850461a/rlang'  \
+#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
+#>   --install-tests
+#> 
+#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
+#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc2dc10c52/dplyr'  \
+#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
+#>   --install-tests
+#> 
+#> Skipping install of 'glue' from a cran remote, the SHA1 (1.2.0) has not changed since last install.
 #>   Use `force = TRUE` to force installation
+#> Installing purrr
+#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
+#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc768c28c0/purrr'  \
+#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
+#>   --install-tests
+#> 
+#> Skipping install of 'Rcpp' from a cran remote, the SHA1 (0.12.13) has not changed since last install.
+#>   Use `force = TRUE` to force installation
+#> Skipping install of 'rlang' from a cran remote, the SHA1 (0.1.4) has not changed since last install.
+#>   Use `force = TRUE` to force installation
+#> Installing tidyselect
+#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
+#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc5f7e65af/tidyselect'  \
+#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
+#>   --install-tests
+#> 
+#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
+#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc52a1daa5/tidyr'  \
+#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
+#>   --install-tests
+#> 
+#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
+#>   --quiet CMD INSTALL  \
+#>   '/tmp/RtmpDeN41W/devtools32bc413eb4f3/WeigeHuangEcon-cfa-757c046'  \
+#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
+#>   --install-tests
+#> 
 ```
 
 or from CRAN using
