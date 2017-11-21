@@ -52,6 +52,14 @@ compute.cfa2 <- function(tvals, yvals, data, yname, tname, xnames=NULL,  method=
             obj <- distreg(formla, data, yvals, link)
         } else if (method == "qr") {
             obj <- rq(formla, tau=tau, data)
+        } else if (method == "ll") {
+            formla <- as.formula(paste0(yname,"~",tname))
+            xformla <- as.formula("y ~ xxxx")
+            xformla <- addCovToFormla(xnames, xformla)
+            xformla <- dropCovFromFormla("xxxx", xformla)
+            formula.tools::lhs(xformla) <- NULL
+            print("computing local linear distribution regression")
+            obj <- lldistreg(formla, xformla, data, yvals, tvals)
         } else {
             stop("method not yet implemented")
         }
@@ -65,7 +73,8 @@ compute.cfa2 <- function(tvals, yvals, data, yname, tname, xnames=NULL,  method=
     ##for (i in 1:length(tvals)) {
 
     out <- lapply(1:length(tvals), function(i) { 
-        xmat1 <- data
+        xmat1 <- data[,c(tname,xnames)]
+        xmat1 <- cbind.data.frame(1, xmat1)
         xmat1[,tname] <- tvals[i]
         thisdist <- Fycondx(obj, yvals, xmat1)
         combineDfs(yvals, thisdist)
@@ -405,8 +414,7 @@ cfa2 <- function(formla, tvals, yvals, data,
         dta2 <- cbind.data.frame(dta, xdta2)
         xnames2 <- colnames(xdta2)[-1]
     }
-    
-    
+
     cfa1 <- compute.cfa2(tvals, yvals, dta1, yname, tname, xnames1,
                         method1, link1, tau1, condDistobj1)
     cfa2 <- compute.cfa2(tvals, yvals, dta2, yname, tname, xnames2,
@@ -425,14 +433,15 @@ cfa2 <- function(formla, tvals, yvals, data,
         ##    pb$tick()
         bstrap <- pbapply::pblapply(1:iters, function(z) {
             b <- sample(1:n, n, replace=TRUE)
-            bdta <- data[b,]
-            list(bootiter1=compute.cfa2(tvals, yvals, bdta, yname,
+            bdta1 <- dta1[b,]
+            bdta2 <- dta2[b,]
+            list(bootiter1=compute.cfa2(tvals, yvals, bdta1, yname,
                                        tname, xnames1,
                                        method1, link1, tau1),##$distcondt,
-                 bootiter2=compute.cfa2(tvals, yvals, bdta, yname,
+                 bootiter2=compute.cfa2(tvals, yvals, bdta2, yname,
                                        tname, xnames2,
                                        method2, link2, tau2),
-                 tvals=bdta[,tname])
+                 tvals=bdta1[,tname])
         }, cl=cl)
         bootiterlist1 <- lapply(bstrap, function(x){ x$bootiter1 })
         bootiterlist2 <- lapply(bstrap, function(x){ x$bootiter2 })
@@ -637,10 +646,14 @@ ggplot2.CFA <- function(cfaseobj, setype="pointwise", ylim=NULL,
     c <- cfaseobj$c
     cmat1 <- cbind.data.frame(tvals, est)
     cmat1$which <- "est"
-    cmat2 <- cbind.data.frame(tvals, se)
-    cmat2$which <- "se"
-    colnames(cmat2) <- colnames(cmat1)
-    cmat <- rbind.data.frame(cmat1, cmat2)
+    if (!is.null(se)) {
+        cmat2 <- cbind.data.frame(tvals, se)
+        cmat2$which <- "se"
+        colnames(cmat2) <- colnames(cmat1)
+        cmat <- rbind.data.frame(cmat1, cmat2)
+    } else {
+        cmat <- cmat1
+    }
 
     cmat <- tidyr::gather(cmat, key=k, value=v, -tvals, -which)
 
@@ -648,12 +661,14 @@ ggplot2.CFA <- function(cfaseobj, setype="pointwise", ylim=NULL,
 
     p <- ggplot(cmat, aes(x=tvals, y=est, group=k)) +
         geom_line(aes(color=k))
-    if (setype == "both" | setype=="pointwise") {
+    if (!is.null(se)) {
+        if (setype == "both" | setype=="pointwise") {
             p <- p + geom_line(aes(y=est+1.96*se), lty=3) + geom_line(aes(y=est-1.96*se), lty=3)
-    }
-    if (setype=="both" | setype=="uniform") {
+        }
+        if (setype=="both" | setype=="uniform") {
             p <-  p + geom_line(aes(y=est+c*se), lty=2) + geom_line(aes(y=est-c*se), lty=2)
-    }        
+        }
+    }
     p <- p + theme_bw()
 
     if (!is.null(ylim)) {
