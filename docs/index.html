@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Counterfactual Analysis • cfa</title>
-<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -67,9 +67,7 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install cfa from github with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools::<span class="kw">install_github</span>(<span class="st">"WeigeHuangEcon/cfa"</span>)
-<span class="co">#&gt; Skipping install of 'cfa' from a github remote, the SHA1 (757c0460) has not changed since last install.</span>
-<span class="co">#&gt;   Use `force = TRUE` to force installation</span></code></pre></div>
+devtools::<span class="kw">install_github</span>(<span class="st">"WeigeHuangEcon/cfa"</span>)</code></pre></div>
 <p>or from CRAN using</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"cfa"</span>)</code></pre></div>
 </div>
@@ -87,11 +85,11 @@ devtools::<span class="kw">install_github</span>(<span class="st">"WeigeHuangEco
 tvals &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">10</span>,<span class="dv">12</span>,<span class="dt">length.out=</span><span class="dv">10</span>)
 yvals &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">quantile</span>(igm$lcfincome, .<span class="dv">05</span>), <span class="kw">quantile</span>(igm$lcfincome, .<span class="dv">95</span>), <span class="dt">length.out=</span><span class="dv">50</span>)
 ## This line doesn't adjust for any covariates
-obs.dist &lt;-<span class="st"> </span><span class="kw">cfa</span>(lcfincome ~<span class="st"> </span>lfincome, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">data=</span>igm, <span class="dt">iters=</span><span class="dv">25</span>)
+obs.dist &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/cfa/topics/cfa">cfa</a></span>(lcfincome ~<span class="st"> </span>lfincome, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">data=</span>igm, <span class="dt">iters=</span><span class="dv">25</span>)
 <span class="co">#&gt; boostrapping standard errors...</span>
 
 ## This line adjusts for differences in education
-cf.dist &lt;-<span class="st"> </span><span class="kw">cfa</span>(lcfincome ~<span class="st"> </span>lfincome, ~HEDUC, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">data=</span>igm, <span class="dt">iters=</span><span class="dv">25</span>)
+cf.dist &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/cfa/topics/cfa">cfa</a></span>(lcfincome ~<span class="st"> </span>lfincome, ~HEDUC, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">data=</span>igm, <span class="dt">iters=</span><span class="dv">25</span>)
 <span class="co">#&gt; boostrapping standard errors...</span>
 <span class="kw">class</span>(cf.dist)
 <span class="co">#&gt; [1] "CFA"</span>
@@ -108,6 +106,344 @@ cf.dist &lt;-<span class="st"> </span><span class="kw">cfa</span>(lcfincome ~<sp
 <p>These types of results are simple to plot as function of <span class="math inline">\(t\)</span>. The <code>cfa</code> packages implements plotting mechanisms using <code>ggplot2</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/ggplot2.CFA.html">ggplot2.CFA</a></span>(cf.e)</code></pre></div>
 <p><img src="README-unnamed-chunk-4-1.png" width="672"></p>
+<p>Next, we include an example where quantile regression is used in the first step to estimate the conditional conditional distribution. The following code estimates two counterfactual distributions using first-step quantile regression. The first one does not include any covariates (so the counterfactual distribution is the observed distribution); the second includes the head of the household’s education as a covariate.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(quantreg)
+<span class="co">#&gt; Loading required package: SparseM</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'SparseM'</span>
+<span class="co">#&gt; The following object is masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     backsolve</span>
+out &lt;-<span class="st"> </span><span class="kw"><a href="reference/cfa.html">cfa2</a></span>(lcfincome ~<span class="st"> </span>lfincome, tvals, yvals, igm, <span class="dt">method1=</span><span class="st">"qr"</span>, <span class="dt">xformla2=</span>~HEDUC, <span class="dt">method2=</span><span class="st">"qr"</span>, <span class="dt">iters=</span><span class="dv">25</span>, <span class="dt">tau1=</span><span class="kw">seq</span>(.<span class="dv">05</span>,.<span class="dv">95</span>,.<span class="dv">05</span>), <span class="dt">tau2=</span><span class="kw">seq</span>(.<span class="dv">05</span>,.<span class="dv">95</span>,.<span class="dv">05</span>))
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+<span class="co">#&gt; boostrapping standard errors...</span>
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span>
+
+<span class="co">#&gt; Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique</span></code></pre></div>
+<p>Joint estimation allows one to test if the results are the same whether or not covariates are included. To do this we can run the following code which produces uniform confidence bands on the difference between the two sets of results. Because the bands are uniform, one can reject that child’s income depends on parents’ income if the result is statistically different from 0 anywhere.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/ggplot2.CFA.html">ggplot2.CFA</a></span>(<span class="kw"><a href="reference/getResDiff.CFA.html">getResDiff.CFA</a></span>(out$cfa1, out$cfa2, E), <span class="dt">setype=</span><span class="st">"uniform"</span>)</code></pre></div>
+<p><img src="README-plotdiff-1.png" width="672"> As another example, we can test if the variance of child’s income changes with parents’ income. The following code plots uniform confidence bands for the difference between the variance of child’s income conditional on parent’s income and the average variance (averaged over parent’s income).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/ggplot2.CFA.html">ggplot2.CFA</a></span>(<span class="kw"><a href="reference/test.CFA.html">test.CFA</a></span>(out$cfa1, Var, igm$lfincome), <span class="dt">setype=</span><span class="st">"uniform"</span>)</code></pre></div>
+<p><img src="README-plottest-1.png" width="672"></p>
+<p>As a final example, we show how to compute counterfactual distributions using local linear regression. The computation is a bit slower, so we do not plot standard errors here.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">llres &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/cfa/topics/cfa">cfa</a></span>(lcfincome ~<span class="st"> </span>lfincome, ~HEDUC, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">method=</span><span class="st">"ll"</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">data=</span>igm)
+<span class="co">#&gt; [1] "computing local linear distribution regression"</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/ggplot2.CFA.html">ggplot2.CFA</a></span>(<span class="kw"><a href="reference/getRes.CFA.html">getRes.CFA</a></span>(llres, E, <span class="dt">se=</span><span class="ot">FALSE</span>))</code></pre></div>
+<p><img src="README-plotll-1.png" width="672"></p>
 </div>
 </div>
 </div>

@@ -13,69 +13,6 @@ You can install cfa from github with:
 ``` r
 # install.packages("devtools")
 devtools::install_github("WeigeHuangEcon/cfa")
-#> Downloading GitHub repo WeigeHuangEcon/cfa@master
-#> from URL https://api.github.com/repos/WeigeHuangEcon/cfa/zipball/master
-#> Installing cfa
-#> Installing tidyr
-#> Installing dplyr
-#> Installing BH
-#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
-#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc62a95ca9/BH'  \
-#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
-#>   --install-tests
-#> 
-#> Installing glue
-#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
-#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc69d7f96a/glue'  \
-#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
-#>   --install-tests
-#> 
-#> Installing Rcpp
-#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
-#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc21b03cba/Rcpp'  \
-#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
-#>   --install-tests
-#> 
-#> Installing rlang
-#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
-#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc2850461a/rlang'  \
-#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
-#>   --install-tests
-#> 
-#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
-#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc2dc10c52/dplyr'  \
-#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
-#>   --install-tests
-#> 
-#> Skipping install of 'glue' from a cran remote, the SHA1 (1.2.0) has not changed since last install.
-#>   Use `force = TRUE` to force installation
-#> Installing purrr
-#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
-#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc768c28c0/purrr'  \
-#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
-#>   --install-tests
-#> 
-#> Skipping install of 'Rcpp' from a cran remote, the SHA1 (0.12.13) has not changed since last install.
-#>   Use `force = TRUE` to force installation
-#> Skipping install of 'rlang' from a cran remote, the SHA1 (0.1.4) has not changed since last install.
-#>   Use `force = TRUE` to force installation
-#> Installing tidyselect
-#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
-#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc5f7e65af/tidyselect'  \
-#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
-#>   --install-tests
-#> 
-#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
-#>   --quiet CMD INSTALL '/tmp/RtmpDeN41W/devtools32bc52a1daa5/tidyr'  \
-#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
-#>   --install-tests
-#> 
-#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
-#>   --quiet CMD INSTALL  \
-#>   '/tmp/RtmpDeN41W/devtools32bc413eb4f3/WeigeHuangEcon-cfa-757c046'  \
-#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
-#>   --install-tests
-#> 
 ```
 
 or from CRAN using
@@ -132,3 +69,306 @@ ggplot2.CFA(cf.e)
 ```
 
 ![](README-unnamed-chunk-4-1.png)
+
+Next, we include an example where quantile regression is used in the first step to estimate the conditional conditional distribution. The following code estimates two counterfactual distributions using first-step quantile regression. The first one does not include any covariates (so the counterfactual distribution is the observed distribution); the second includes the head of the household's education as a covariate.
+
+``` r
+library(quantreg)
+#> Loading required package: SparseM
+#> 
+#> Attaching package: 'SparseM'
+#> The following object is masked from 'package:base':
+#> 
+#>     backsolve
+out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr", xformla2=~HEDUC, method2="qr", iters=25, tau1=seq(.05,.95,.05), tau2=seq(.05,.95,.05))
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+#> boostrapping standard errors...
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+
+#> Warning in rq.fit.br(x, y, tau = tau, ...): Solution may be nonunique
+```
+
+Joint estimation allows one to test if the results are the same whether or not covariates are included. To do this we can run the following code which produces uniform confidence bands on the difference between the two sets of results. Because the bands are uniform, one can reject that child's income depends on parents' income if the result is statistically different from 0 anywhere.
+
+``` r
+ggplot2.CFA(getResDiff.CFA(out$cfa1, out$cfa2, E), setype="uniform")
+```
+
+![](README-plotdiff-1.png) As another example, we can test if the variance of child's income changes with parents' income. The following code plots uniform confidence bands for the difference between the variance of child's income conditional on parent's income and the average variance (averaged over parent's income).
+
+``` r
+ggplot2.CFA(test.CFA(out$cfa1, Var, igm$lfincome), setype="uniform")
+```
+
+![](README-plottest-1.png)
+
+As a final example, we show how to compute counterfactual distributions using local linear regression. The computation is a bit slower, so we do not plot standard errors here.
+
+``` r
+llres <- cfa(lcfincome ~ lfincome, ~HEDUC, tvals=tvals, yvals=yvals, method="ll", se=FALSE, data=igm)
+#> [1] "computing local linear distribution regression"
+```
+
+``` r
+ggplot2.CFA(getRes.CFA(llres, E, se=FALSE))
+```
+
+![](README-plotll-1.png)

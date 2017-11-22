@@ -8,7 +8,8 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-"
+  fig.path = "README-",
+  warning = FALSE
 )
 ```
 
@@ -61,22 +62,24 @@ ggplot2.CFA(cf.e)
 
 Next, we include an example where quantile regression is used in the first step to estimate the conditional conditional distribution.  The following code estimates two counterfactual distributions using first-step quantile regression.  The first one does not include any covariates (so the counterfactual distribution is the observed distribution); the second includes the head of the household's education as a covariate.  
 
-```{r}
+```{r qr}
 library(quantreg)
-out <- cfa2(lcfincome ~ lfincome, t, y_0, data, method1="qr", xformla2=~HEDUC, method2="qr", iters=25, tau1=seq(.02,.98,.02), tau2=seq(.02,.98,.02))
+out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr", xformla2=~HEDUC, method2="qr", iters=25, tau1=seq(.05,.95,.05), tau2=seq(.05,.95,.05))
 ```
 
 Joint estimation allows one to test if the results are the same whether or not covariates are included.  To do this we can run the following code which produces uniform confidence bands on the difference between the two sets of results.  Because the bands are uniform, one can reject that child's income depends on parents' income if the result is statistically different from 0 anywhere.
-```{r}
+```{r plotdiff}
 ggplot2.CFA(getResDiff.CFA(out$cfa1, out$cfa2, E), setype="uniform")
 ```
 As another example, we can test if the variance of child's income changes with parents' income.  The following code plots uniform confidence bands for the difference between the variance of child's income conditional on parent's income and the average variance (averaged over parent's income).  
-```{r}
-ggplot2.CFA(test.CFA(out$cfa1, Var, data$lfincome), setype="uniform")
+```{r plottest}
+ggplot2.CFA(test.CFA(out$cfa1, Var, igm$lfincome), setype="uniform")
 ```
 
 As a final example, we show how to compute counterfactual distributions using local linear regression.  The computation is a bit slower, so we do not plot standard errors here.
-```{r}
-llres <- cfa(lcfincome ~ lfincome, ~HEDUC, tvals=t, yvals=y_0, method="ll", se=FALSE, data=data)
-ggplot2.CFA(getRes.CFA(temp, E, se=FALSE))
+```{r ll}
+llres <- cfa(lcfincome ~ lfincome, ~HEDUC, tvals=tvals, yvals=yvals, method="ll", se=FALSE, data=igm)
+```
+```{r plotll}
+ggplot2.CFA(getRes.CFA(llres, E, se=FALSE))
 ```
