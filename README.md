@@ -1,33 +1,26 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-cfa
-===
+ccfa
+====
 
-The cfa package contains methods for computing counterfactuals with a continuous treatment variable. In particular, the package can be used to calculate the expected value, the variance, the interquantile range, the fraction of observations below or above a particular cutoff, or other user-supplied functions of an outcome of interest conditional on a continuous treatment. The package can also be used for computing these same functionals after adjusting for differences in covariates at different values of the treatment. Further, one can use the package to conduct uniform inference for each parameter of interest across all values of the treatment, uniformly test whether adjusting for covariates makes a difference at any value of the treatment, and test whether a parameter of interest is different from its average value at an value of the treatment.
+The `ccfa` package contains methods for computing counterfactuals with a continuous treatment variable. In particular, the package can be used to calculate the expected value, the variance, the interquantile range, the fraction of observations below or above a particular cutoff, or other user-supplied functions of an outcome of interest conditional on a continuous treatment. The package can also be used for computing these same functionals after adjusting for differences in covariates at different values of the treatment. Further, one can use the package to conduct uniform inference for each parameter of interest across all values of the treatment, uniformly test whether adjusting for covariates makes a difference at any value of the treatment, and test whether a parameter of interest is different from its average value at an value of the treatment.
 
 Installation
 ------------
 
-You can install cfa from github with:
+You can install `ccfa` from github with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("WeigeHuangEcon/cfa")
-#> Downloading GitHub repo WeigeHuangEcon/cfa@master
-#> from URL https://api.github.com/repos/WeigeHuangEcon/cfa/zipball/master
-#> Installing cfa
-#> '/usr/lib/R/bin/R' --no-site-file --no-environ --no-save --no-restore  \
-#>   --quiet CMD INSTALL  \
-#>   '/tmp/RtmpX7Vna5/devtools2fe25aa5f0a5/WeigeHuangEcon-cfa-04d0ce1'  \
-#>   --library='/home/brant/R/x86_64-pc-linux-gnu-library/3.4'  \
-#>   --install-tests
-#> 
+devtools::install_github("WeigeHuangEcon/ccfa")
+#> Skipping install of 'ccfa' from a github remote, the SHA1 (bfff6eac) has not changed since last install.
+#>   Use `force = TRUE` to force installation
 ```
 
 or from CRAN using
 
 ``` r
-install.packages("cfa")
+install.packages("ccfa")
 ```
 
 Usage
@@ -36,9 +29,9 @@ Usage
 The following example shows how to estimate the counterfactual distribution of child's income as a function of parent's income, as well as some additional parameters that depend on this distribution.
 
 ``` r
-library(cfa)
+library(ccfa)
 #> 
-#> Attaching package: 'cfa'
+#> Attaching package: 'ccfa'
 #> The following object is masked from 'package:stats':
 #> 
 #>     IQR
@@ -71,13 +64,13 @@ cf.e <- getRes.CFA(cf.dist, fun=E, se=T)
 
 The parameter `fun` in the `getRes.CFA` function accepts any function that can be applied to a distribution function and return a single number (additional parameters that the function needs can be passed through the `...` argument). In the example above, `E` is computes the expectation given a distribution function -- this function is supplied in the package. Besides `E`, functions for computing the variance, inter-quantile range, the fraction of individuals below the poverty line, and the fraction of individuals who are "rich" -- these are called `Var`, `IQR`, `pov`, and `rich`. But other custom functions could be developed by users.
 
-These types of results are simple to plot as function of \(t\). The `cfa` packages implements plotting mechanisms using `ggplot2`.
+These types of results are simple to plot as function of \(t\). The `ccfa` packages implements plotting mechanisms using `ggplot2`.
 
 ``` r
 ggplot2.CFA(cf.e)
 ```
 
-![](README-unnamed-chunk-4-1.png)
+![](man/figures/README-unnamed-chunk-4-1.png)
 
 Next, we include an example where quantile regression is used in the first step to estimate the conditional conditional distribution. The following code estimates two counterfactual distributions using first-step quantile regression. The first one does not include any covariates (so the counterfactual distribution is the observed distribution); the second includes the head of the household's education as a covariate.
 
@@ -99,13 +92,15 @@ Joint estimation allows one to test if the results are the same whether or not c
 ggplot2.CFA(getResDiff.CFA(out$cfa1, out$cfa2, E), setype="uniform")
 ```
 
-![](README-plotdiff-1.png) As another example, we can test if the variance of child's income changes with parents' income. The following code plots uniform confidence bands for the difference between the variance of child's income conditional on parent's income and the average variance (averaged over parent's income).
+![](man/figures/README-plotdiff-1.png)
+
+As another example, we can test if the variance of child's income changes with parents' income. The following code plots uniform confidence bands for the difference between the variance of child's income conditional on parent's income and the average variance (averaged over parent's income).
 
 ``` r
 ggplot2.CFA(test.CFA(out$cfa1, Var, igm$lfincome), setype="uniform")
 ```
 
-![](README-plottest-1.png)
+![](man/figures/README-plottest-1.png)
 
 As a final example, we show how to compute counterfactual distributions using local linear regression. The computation is a bit slower, so we do not plot standard errors here.
 
@@ -118,4 +113,4 @@ llres <- cfa(lcfincome ~ lfincome, ~HEDUC, tvals=tvals, yvals=yvals, method="ll"
 ggplot2.CFA(getRes.CFA(llres, E, se=FALSE))
 ```
 
-![](README-plotll-1.png)
+![](man/figures/README-plotll-1.png)

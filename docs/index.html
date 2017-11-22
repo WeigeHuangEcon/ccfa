@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Counterfactual Analysis • cfa</title>
+<title>Continuous Counterfactual Analysis • ccfa</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
@@ -24,7 +24,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">cfa</a>
+      <a class="navbar-brand" href="index.html">ccfa</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -58,28 +58,28 @@
     
 <div class="contents">
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<div id="cfa" class="section level1">
+<div id="ccfa" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#cfa" class="anchor"></a>cfa</h1></div>
-<p>The cfa package contains methods for computing counterfactuals with a continuous treatment variable. In particular, the package can be used to calculate the expected value, the variance, the interquantile range, the fraction of observations below or above a particular cutoff, or other user-supplied functions of an outcome of interest conditional on a continuous treatment. The package can also be used for computing these same functionals after adjusting for differences in covariates at different values of the treatment. Further, one can use the package to conduct uniform inference for each parameter of interest across all values of the treatment, uniformly test whether adjusting for covariates makes a difference at any value of the treatment, and test whether a parameter of interest is different from its average value at an value of the treatment.</p>
+<a href="#ccfa" class="anchor"></a>ccfa</h1></div>
+<p>The <code>ccfa</code> package contains methods for computing counterfactuals with a continuous treatment variable. In particular, the package can be used to calculate the expected value, the variance, the interquantile range, the fraction of observations below or above a particular cutoff, or other user-supplied functions of an outcome of interest conditional on a continuous treatment. The package can also be used for computing these same functionals after adjusting for differences in covariates at different values of the treatment. Further, one can use the package to conduct uniform inference for each parameter of interest across all values of the treatment, uniformly test whether adjusting for covariates makes a difference at any value of the treatment, and test whether a parameter of interest is different from its average value at an value of the treatment.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install cfa from github with:</p>
+<p>You can install <code>ccfa</code> from github with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools::<span class="kw">install_github</span>(<span class="st">"WeigeHuangEcon/cfa"</span>)
-<span class="co">#&gt; Skipping install of 'cfa' from a github remote, the SHA1 (04d0ce14) has not changed since last install.</span>
+devtools::<span class="kw">install_github</span>(<span class="st">"WeigeHuangEcon/ccfa"</span>)
+<span class="co">#&gt; Skipping install of 'ccfa' from a github remote, the SHA1 (bfff6eac) has not changed since last install.</span>
 <span class="co">#&gt;   Use `force = TRUE` to force installation</span></code></pre></div>
 <p>or from CRAN using</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"cfa"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"ccfa"</span>)</code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>The following example shows how to estimate the counterfactual distribution of child’s income as a function of parent’s income, as well as some additional parameters that depend on this distribution.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(cfa)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ccfa)
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'cfa'</span>
+<span class="co">#&gt; Attaching package: 'ccfa'</span>
 <span class="co">#&gt; The following object is masked from 'package:stats':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     IQR</span>
@@ -105,9 +105,11 @@ cf.dist &lt;-<span class="st"> </span><span class="kw">cfa</span>(lcfincome ~<sp
 <p>The objects that are returned from the <code>cfa</code> method are (most of the time) too complicated to directly understand, as they are distribution function for every value of <span class="math inline">\(t\)</span>. Instead, the <code>getRes.CFA</code> method can be used to obtain particular results from a CFA object. Here is an example</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cf.e &lt;-<span class="st"> </span><span class="kw"><a href="reference/getRes.CFA.html">getRes.CFA</a></span>(cf.dist, <span class="dt">fun=</span>E, <span class="dt">se=</span>T)</code></pre></div>
 <p>The parameter <code>fun</code> in the <code>getRes.CFA</code> function accepts any function that can be applied to a distribution function and return a single number (additional parameters that the function needs can be passed through the <code>...</code> argument). In the example above, <code>E</code> is computes the expectation given a distribution function – this function is supplied in the package. Besides <code>E</code>, functions for computing the variance, inter-quantile range, the fraction of individuals below the poverty line, and the fraction of individuals who are “rich” – these are called <code>Var</code>, <code>IQR</code>, <code>pov</code>, and <code>rich</code>. But other custom functions could be developed by users.</p>
-<p>These types of results are simple to plot as function of <span class="math inline">\(t\)</span>. The <code>cfa</code> packages implements plotting mechanisms using <code>ggplot2</code>.</p>
+<p>These types of results are simple to plot as function of <span class="math inline">\(t\)</span>. The <code>ccfa</code> packages implements plotting mechanisms using <code>ggplot2</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/ggplot2.CFA.html">ggplot2.CFA</a></span>(cf.e)</code></pre></div>
-<p><img src="README-unnamed-chunk-4-1.png" width="672"></p>
+<div class="figure">
+<img src="reference/figures/README-unnamed-chunk-4-1.png">
+</div>
 <p>Next, we include an example where quantile regression is used in the first step to estimate the conditional conditional distribution. The following code estimates two counterfactual distributions using first-step quantile regression. The first one does not include any covariates (so the counterfactual distribution is the observed distribution); the second includes the head of the household’s education as a covariate.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(quantreg)
 <span class="co">#&gt; Loading required package: SparseM</span>
@@ -120,14 +122,21 @@ out &lt;-<span class="st"> </span><span class="kw"><a href="reference/cfa.html">
 <span class="co">#&gt; boostrapping standard errors...</span></code></pre></div>
 <p>Joint estimation allows one to test if the results are the same whether or not covariates are included. To do this we can run the following code which produces uniform confidence bands on the difference between the two sets of results. Because the bands are uniform, one can reject that child’s income depends on parents’ income if the result is statistically different from 0 anywhere.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/ggplot2.CFA.html">ggplot2.CFA</a></span>(<span class="kw"><a href="reference/getResDiff.CFA.html">getResDiff.CFA</a></span>(out$cfa1, out$cfa2, E), <span class="dt">setype=</span><span class="st">"uniform"</span>)</code></pre></div>
-<p><img src="README-plotdiff-1.png" width="672"> As another example, we can test if the variance of child’s income changes with parents’ income. The following code plots uniform confidence bands for the difference between the variance of child’s income conditional on parent’s income and the average variance (averaged over parent’s income).</p>
+<div class="figure">
+<img src="reference/figures/README-plotdiff-1.png">
+</div>
+<p>As another example, we can test if the variance of child’s income changes with parents’ income. The following code plots uniform confidence bands for the difference between the variance of child’s income conditional on parent’s income and the average variance (averaged over parent’s income).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/ggplot2.CFA.html">ggplot2.CFA</a></span>(<span class="kw"><a href="reference/test.CFA.html">test.CFA</a></span>(out$cfa1, Var, igm$lfincome), <span class="dt">setype=</span><span class="st">"uniform"</span>)</code></pre></div>
-<p><img src="README-plottest-1.png" width="672"></p>
+<div class="figure">
+<img src="reference/figures/README-plottest-1.png">
+</div>
 <p>As a final example, we show how to compute counterfactual distributions using local linear regression. The computation is a bit slower, so we do not plot standard errors here.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">llres &lt;-<span class="st"> </span><span class="kw">cfa</span>(lcfincome ~<span class="st"> </span>lfincome, ~HEDUC, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">method=</span><span class="st">"ll"</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">data=</span>igm)
 <span class="co">#&gt; [1] "computing local linear distribution regression"</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/ggplot2.CFA.html">ggplot2.CFA</a></span>(<span class="kw"><a href="reference/getRes.CFA.html">getRes.CFA</a></span>(llres, E, <span class="dt">se=</span><span class="ot">FALSE</span>))</code></pre></div>
-<p><img src="README-plotll-1.png" width="672"></p>
+<div class="figure">
+<img src="reference/figures/README-plotll-1.png">
+</div>
 </div>
 </div>
 </div>
@@ -135,12 +144,7 @@ out &lt;-<span class="st"> </span><span class="kw"><a href="reference/cfa.html">
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2 class="hasAnchor">
-<a href="#sidebar" class="anchor"></a>Links</h2>
-<ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cran.r-project.org/package=cfa">https://​cran.r-project.org/​package=cfa</a>
-</li>
-</ul>
-<h2>License</h2>
+<a href="#sidebar" class="anchor"></a>License</h2>
 <p><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></p>
 <h2>Developers</h2>
 <ul class="list-unstyled">

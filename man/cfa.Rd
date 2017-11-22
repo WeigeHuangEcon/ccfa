@@ -51,7 +51,7 @@ cfa: A package for computing counterfactuals with a continuous treatment
 }
 \examples{
 data(igm)
-tvals <- seq(10,12,length.out=10)
+tvals <- seq(10,12,length.out=8)
 yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
 ## This line doesn't adjust for any covariates
 cfa(lcfincome ~ lfincome, tvals=tvals, yvals=yvals, data=igm,
