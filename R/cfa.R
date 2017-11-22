@@ -1,34 +1,3 @@
-## #' @title compute.cfa
-## #'
-## #' @description does the heavy lifting for computing cfa results
-## #' @inheritParams cfa
-## #'
-## #' @return CFA object
-## #' @keywords internal
-## #'
-## #' @export
-## compute.cfa <- function(tvals, yvals, data, yname, tname, xnames=NULL, drobj=NULL) {
-##     xmat <- data[,xnames]
-##     if (is.null(drobj)) {
-##         formla <- as.formula(paste0(yname,"~",tname))
-##         formla <- addCovToFormla(xnames, formla)
-##         drobj <- distreg(formla, data, yvals)
-##     }
-
-##     coef <- t(sapply(drobj$glmlist, coef))
-    
-##     out <- list()
-    
-##     for (i in 1:length(tvals)) {
-##         xmat1 <- cbind.data.frame(tvals[i], xmat)
-##         thisdist <- unlist(lapply(lapply(yvals, predict.DR, drobj=drobj, xdf=xmat1), mean))
-##         out[[i]] <- BMisc::makeDist(yvals, thisdist, rearrange=TRUE)##pred(tvals[i], drobj=drobj, yvals=yvals, xmat=xmat1)
-##     }
-
-##     return(CFA.OBJ(tvals, out, coef=coef))
-
-## }
-
 #' @title compute.cfa2
 #'
 #' @description an update of compute.cfa that allows one to use other
@@ -157,7 +126,7 @@ cfa.inner <- function(tvals, yvals, data, yname, tname, xnames=NULL,
 #'
 #' @examples
 #' data(igm)
-#' tvals <- seq(10,12,length.out=10)
+#' tvals <- seq(10,12,length.out=8)
 #' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
 #' ## This line doesn't adjust for any covariates
 #' cfa(lcfincome ~ lfincome, tvals=tvals, yvals=yvals, data=igm,
