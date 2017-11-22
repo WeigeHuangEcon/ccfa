@@ -14,6 +14,7 @@ Imports: quantreg,
     BMisc,
     tidyr,
     ggplot2,
-    TempleMetrics
+    TempleMetrics,
+    formula.tools
 RoxygenNote: 6.0.1
 
