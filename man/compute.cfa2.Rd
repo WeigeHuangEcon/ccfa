@@ -8,6 +8,23 @@ compute.cfa2(tvals, yvals, data, yname, tname, xnames = NULL, method = "dr",
   link = "logit", tau = seq(0.1, 0.99, 0.01), condDistobj = NULL)
 }
 \arguments{
+\item{tvals}{the values of the "treatment" to compute parameters of
+interest for}
+
+\item{yvals}{the values to compute the counterfactual distribution for}
+
+\item{data}{the data.frame where y, t, and x are}
+
+\item{method}{either "dr" or "qr" for distribution regression or quantile regression}
+
+\item{link}{if using distribution regression, any link function that works with the binomial family (e.g. logit (the default), probit, cloglog)}
+
+\item{tau}{if using quantile regression, which values of tau to estimate
+the conditional quantiles}
+
+\item{condDistobj}{optional conditional distribution  object that has
+been previously  computed}
+
 \item{condDist}{optional pre-estimated conditional distribution function}
 }
 \value{

@@ -24,3 +24,13 @@ CFASE object
 test if a counterfactual distribution is equal to its average
  for all values of the treatment
 }
+\examples{
+\dontrun{
+## obtain counterfactual results
+data(igm)
+out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
+xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+tau2=seq(.05,.95,.05))
+test.CFA(out$cfa1, Var, igm$lfincome)
+}
+}

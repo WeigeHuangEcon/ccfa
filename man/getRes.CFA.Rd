@@ -10,7 +10,16 @@ getRes.CFA(cfaobj, fun, se = T, ...)
 \item{cfaobj}{a CFA object}
 
 \item{fun}{a function to apply for every value of the treatment in the
-cfaobj}
+ cfaobj.  The ccfa package provides several built-in functions:
+ E (for expected value as a function of the treatment variable),
+ Var (for the variance as a function of the treatment variable),
+ IQR (the interquantile range as a function of the treatment variable),
+ pov (the fraction of observations with outcomes below some threshold,
+  as a function of the treatment variable),
+ rich (the fraction of observations with outcomes above some threshold,
+  as a function of the treatment variable),
+but other user-defined functions can be written.  The requirement is that
+ they need to take in an ecdf object and output a scalar result.}
 
 \item{se}{whether or not to compute standard errors}
 
@@ -21,4 +30,24 @@ CFASE object
 }
 \description{
 get a particular parameter of interest from a cfa object
+}
+\examples{
+\dontrun{
+## obtain counterfactual results
+cfaresults <- cfa(lcfincome ~ lfincome, tvals=tvals, yvals=yvals, data=igm,
+ se=FALSE)
+
+## get the average outcome (lfincome) as a function of the treatment
+## variable (lfincome)
+getRes.CFA(cfaresults, E)
+
+## get the variance of the outcomes as a function of the treatment
+## variable
+getRes.CFA(cfaresults, Var)
+
+## get the inter-quantile range of outcomes as a function of the
+## treatment variable
+getRes.CFA(cfaresults, IQR, t1=0.9, t2=0.1)
+}
+
 }

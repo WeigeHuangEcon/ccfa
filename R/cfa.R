@@ -5,7 +5,7 @@
 #'  (not yet implemented) as the first step estimator of the conditional
 #'  distribution
 #'
-#' @inheritParams compute.cfa
+#' @inheritParams cfa
 #' @param condDist optional pre-estimated conditional distribution function
 #'
 #' @return CFA.OBJ
@@ -188,11 +188,39 @@ CFA.OBJ <- function(tvals, distcondt, bootiterlist=NULL, tvallist=NULL, coef=NUL
 #'
 #' @param cfaobj a CFA object
 #' @param fun a function to apply for every value of the treatment in the
-#'  cfaobj
+#'  cfaobj.  The ccfa package provides several built-in functions:
+#'  E (for expected value as a function of the treatment variable),
+#'  Var (for the variance as a function of the treatment variable),
+#'  IQR (the interquantile range as a function of the treatment variable),
+#'  pov (the fraction of observations with outcomes below some threshold,
+#'   as a function of the treatment variable),
+#'  rich (the fraction of observations with outcomes above some threshold,
+#'   as a function of the treatment variable),
+#' but other user-defined functions can be written.  The requirement is that
+#'  they need to take in an ecdf object and output a scalar result.
 #' @param se whether or not to compute standard errors
 #' @param ... can pass additional arguments to fun using this argument
 #'
 #' @return CFASE object
+#' @examples
+#' \dontrun{
+#' ## obtain counterfactual results
+#' cfaresults <- cfa(lcfincome ~ lfincome, tvals=tvals, yvals=yvals, data=igm,
+#'  se=FALSE)
+#'
+#' ## get the average outcome (lfincome) as a function of the treatment
+#' ## variable (lfincome)
+#' getRes.CFA(cfaresults, E)
+#'
+#' ## get the variance of the outcomes as a function of the treatment
+#' ## variable
+#' getRes.CFA(cfaresults, Var)
+#'
+#' ## get the inter-quantile range of outcomes as a function of the
+#' ## treatment variable
+#' getRes.CFA(cfaresults, IQR, t1=0.9, t2=0.1)
+#' }
+#' 
 #' @export
 getRes.CFA <- function(cfaobj, fun, se=T,  ...) {
     tvals <- cfaobj$tvals
@@ -229,6 +257,17 @@ getRes.CFA <- function(cfaobj, fun, se=T,  ...) {
 #' @param ... can pass additional arguments to fun using this argument
 #'
 #' @return CFASE object
+#' @examples
+#' \dontrun{
+#' ## obtain counterfactual results
+#' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
+#' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+#' tau2=seq(.05,.95,.05))
+#'
+#' ## get the difference between the average that adjusts for covariates and
+#' ## the one that does not
+#' getResDiff.CFA(out$cfa1, out$cfa2, E)
+#' }
 #' @export
 getResDiff.CFA <- function(cfaobj1, cfaobj2, fun, se=T, ...) {
     tvals <- cfaobj1$tvals
@@ -292,35 +331,6 @@ getCoef.CFA <- function(cfaobj, yvals, se=T,  ...) {
 }
 
 
-## #' 
-## diff.cfa <- function(tvals, yvals, data, yname, tname,
-##                      xnames1=NULL, drobj1=NULL,
-##                      xnames2=NULL, drobj2=NULL,
-##                      se=TRUE, iters=100, fun, ...) {
-
-##     cfa1 <- compute.cfa(tvals, yvals, data, yname, tname, xnames1, drobj2)
-##     cfa2 <- compute.cfa(tvals, yvals, data, yname, tname, xnames2, drobj2)
-
-##     diffest <- getRes.CFA(cfa1, fun, se=F, ...)$est - getRes.CFA(cfa2, fun, se=F, ...)$est
-
-##     ses <- NULL
-##     if (se) {
-##         bootiterlist <- list()
-##         n <- nrow(data)
-##         cat("bootstrapping standard errors...\n")
-##         bootiterlist <- pbapply::pblapply(1:iters, function(z) {
-##             b <- sample(1:n, n, T)
-##             dtab <- data[b,]
-##             cfa1b <- compute.cfa(tvals, yvals, dtab, yname, tname, xnames1, drobj2)
-##             cfa2b <- compute.cfa(tvals, yvals, dtab, yname, tname, xnames2, drobj2)
-##             diffestb <- as.matrix(getRes.CFA(cfa1b, fun, se=F, ...)$est - getRes.CFA(cfa2b, fun, se=F, ...)$est)
-##         }, cl=8)
-
-##         ses <- apply(simplify2array(bootiterlist), c(1,2), sd)
-##         ses <- if (nrow(ses)==1 | ncol(ses)==1) as.numeric(ses) else ses
-##     }
-##     return(CFASE(tvals=tvals,est=diffest, se=ses))
-## }
 
 
 #' @title cfa2
@@ -349,6 +359,13 @@ getCoef.CFA <- function(cfaobj, yvals, se=T,  ...) {
 #'  object outside of the model, can set it here
 #'
 #' @return list of two CFA objects
+#'
+#' @examples
+#' \dontrun{
+#' ## obtain counterfactual results
+#' cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr", xformla2=~HEDUC,
+#' method2="qr", iters=100, tau1=seq(.05,.95,.05), tau2=seq(.05,.95,.05))
+#' }
 #'
 #' @export
 cfa2 <- function(formla, tvals, yvals, data, 
@@ -434,6 +451,15 @@ cfa2 <- function(formla, tvals, yvals, data,
 #'
 #' @return CFASE object
 #'
+#' @examples
+#' \dontrun{
+#' ## obtain counterfactual results
+#' data(igm)
+#' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
+#' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+#' tau2=seq(.05,.95,.05))
+#' test.CFA(out$cfa1, Var, igm$lfincome)
+#' }
 #' @export
 test.CFA <- function(cfaobj, fun, allt, se=T,  ...) {
     tvals <- cfaobj$tvals
@@ -465,6 +491,26 @@ test.CFA <- function(cfaobj, fun, allt, se=T,  ...) {
 }
 
 
+#' @title lige
+#'
+#' @description compute the local intergenerational elasticity
+#'
+#' @param cfaobj a CFA object
+#' @param h a bandwidth
+#' @param se boolean whether or not to compute standard errors
+#'
+#' @return a CFASE object
+#'
+#' @examples
+#' \dontrun{
+#' ## obtain counterfactual results
+#' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
+#' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+#' tau2=seq(.05,.95,.05))
+#' lige(out$cfa1, h=0.5)
+#' }
+#'
+#' @export
 lige <- function(cfaobj, h, se=T) {
     tvals <- cfaobj$tvals
     bootiterlist <- cfaobj$bootiterlist
@@ -493,7 +539,28 @@ lige <- function(cfaobj, h, se=T) {
     return(CFASE(tvals=tvals[whichT],est=lige, se=ses, c=c))
 }
 
-diff.lige <- function(cfaobj1, cfaobj2, se=T, h) {
+
+#' @title Diff.lige
+#'
+#' @description compute the difference between two estimates of the LIGE
+#'
+#' @param cfaobj1 the first CFA object
+#' @param cfaobj2 the second CFA object
+#' @inheritParams lige
+#'
+#' @return a CFASE object
+#' 
+#' @examples
+#' \dontrun{
+#' ## obtain counterfactual results
+#' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
+#' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+#' tau2=seq(.05,.95,.05))
+#' Diff.lige(out$cfa1, out$cfa2, h=0.5)
+#' }
+#'
+#' @export
+Diff.lige <- function(cfaobj1, cfaobj2, se=T, h) {
     tvals <- cfaobj1$tvals
     e1res <- getRes.CFA(cfaobj1, E, se=FALSE)
     fe1res <- approxfun(tvals, e1res$est)
@@ -533,6 +600,26 @@ diff.lige <- function(cfaobj1, cfaobj2, se=T, h) {
     return(CFASE(tvals=tvals[whichT],est=out, se=ses, c=c))
 }
 
+#' @title test.lige
+#'
+#' @description test if the local intergnerational elasticity is the same across
+#'  all values of the treatment variable
+#'
+#' @inheritParams lige
+#' @param allt all the values of the treatment variable in the dataset
+#'
+#' @return a CFASE object
+#'
+#' @examples
+#' \dontrun{
+#' ## obtain counterfactual results
+#' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
+#' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+#' tau2=seq(.05,.95,.05))
+#' test.lige(out$cfa1, allt=igm$lfincome, h=0.5)
+#' }
+#'
+#' @export
 test.lige <- function(cfaobj, allt, se=T, h) {
     tvals <- cfaobj$tvals
     e1res <- getRes.CFA(cfaobj, E, se=FALSE)
@@ -605,6 +692,18 @@ CFASE <- function(tvals, est, se=NULL, c=NULL) {
 #'  better with this option set to FALSE)
 #'
 #' @return ggplot2 object
+#'
+#' @examples
+#' \dontrun{
+#' ## obtain counterfactual results
+#' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
+#' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+#' tau2=seq(.05,.95,.05))
+#'
+#' ## get the difference between the average that adjusts for covariates and
+#' ## the one that does not
+#' ggplot2.CFA(getResDiff.CFA(out$cfa1, out$cfa2, E), setype="uniform")
+#' } 
 #'
 #' @export
 ggplot2.CFA <- function(cfaseobj, setype="pointwise", ylim=NULL,

@@ -28,3 +28,16 @@ ggplot2 object
 function for plotting results from counterfactual analysis
  using ggplot2
 }
+\examples{
+\dontrun{
+## obtain counterfactual results
+out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
+xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+tau2=seq(.05,.95,.05))
+
+## get the difference between the average that adjusts for covariates and
+## the one that does not
+ggplot2.CFA(getResDiff.CFA(out$cfa1, out$cfa2, E), setype="uniform")
+} 
+
+}

@@ -24,3 +24,15 @@ CFASE object
 \description{
 Get the difference between two CFA objects
 }
+\examples{
+\dontrun{
+## obtain counterfactual results
+out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
+xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+tau2=seq(.05,.95,.05))
+
+## get the difference between the average that adjusts for covariates and
+## the one that does not
+getResDiff.CFA(out$cfa1, out$cfa2, E)
+}
+}
