@@ -95,6 +95,37 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>tvals</th>
+      <td><p>the values of the "treatment" to compute parameters of
+interest for</p></td>
+    </tr>
+    <tr>
+      <th>yvals</th>
+      <td><p>the values to compute the counterfactual distribution for</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>the data.frame where y, t, and x are</p></td>
+    </tr>
+    <tr>
+      <th>method</th>
+      <td><p>either "dr" or "qr" for distribution regression or quantile regression</p></td>
+    </tr>
+    <tr>
+      <th>link</th>
+      <td><p>if using distribution regression, any link function that works with the binomial family (e.g. logit (the default), probit, cloglog)</p></td>
+    </tr>
+    <tr>
+      <th>tau</th>
+      <td><p>if using quantile regression, which values of tau to estimate
+the conditional quantiles</p></td>
+    </tr>
+    <tr>
+      <th>condDistobj</th>
+      <td><p>optional conditional distribution  object that has
+been previously  computed</p></td>
+    </tr>
+    <tr>
       <th>condDist</th>
       <td><p>optional pre-estimated conditional distribution function</p></td>
     </tr>

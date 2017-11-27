@@ -13,7 +13,7 @@ You can install `ccfa` from github with:
 ``` r
 # install.packages("devtools")
 devtools::install_github("WeigeHuangEcon/ccfa")
-#> Skipping install of 'ccfa' from a github remote, the SHA1 (bfff6eac) has not changed since last install.
+#> Skipping install of 'ccfa' from a github remote, the SHA1 (356e921f) has not changed since last install.
 #>   Use `force = TRUE` to force installation
 ```
 

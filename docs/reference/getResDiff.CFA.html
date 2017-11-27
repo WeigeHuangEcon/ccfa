@@ -118,6 +118,17 @@ cfaobj</p></td>
     <p>CFASE object</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'>## obtain counterfactual results</span>
+<span class='no'>out</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cfa.html'>cfa2</a></span>(<span class='no'>lcfincome</span> ~ <span class='no'>lfincome</span>, <span class='no'>tvals</span>, <span class='no'>yvals</span>, <span class='no'>igm</span>, <span class='kw'>method1</span><span class='kw'>=</span><span class='st'>"qr"</span>,
+<span class='kw'>xformla2</span><span class='kw'>=</span>~<span class='no'>HEDUC</span>, <span class='kw'>method2</span><span class='kw'>=</span><span class='st'>"qr"</span>, <span class='kw'>iters</span><span class='kw'>=</span><span class='fl'>100</span>, <span class='kw'>tau1</span><span class='kw'>=</span><span class='fu'>seq</span>(<span class='fl'>.05</span>,<span class='fl'>.95</span>,<span class='fl'>.05</span>),
+<span class='kw'>tau2</span><span class='kw'>=</span><span class='fu'>seq</span>(<span class='fl'>.05</span>,<span class='fl'>.95</span>,<span class='fl'>.05</span>))
+
+<span class='co'>## get the difference between the average that adjusts for covariates and</span>
+<span class='co'>## the one that does not</span>
+<span class='fu'>getResDiff.CFA</span>(<span class='no'>out</span>$<span class='no'>cfa1</span>, <span class='no'>out</span>$<span class='no'>cfa2</span>, <span class='no'>E</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -125,7 +136,9 @@ cfaobj</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

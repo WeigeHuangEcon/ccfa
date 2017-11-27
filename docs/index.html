@@ -68,7 +68,7 @@
 <p>You can install <code>ccfa</code> from github with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 devtools::<span class="kw">install_github</span>(<span class="st">"WeigeHuangEcon/ccfa"</span>)
-<span class="co">#&gt; Skipping install of 'ccfa' from a github remote, the SHA1 (bfff6eac) has not changed since last install.</span>
+<span class="co">#&gt; Skipping install of 'ccfa' from a github remote, the SHA1 (356e921f) has not changed since last install.</span>
 <span class="co">#&gt;   Use `force = TRUE` to force installation</span></code></pre></div>
 <p>or from CRAN using</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"ccfa"</span>)</code></pre></div>
@@ -87,11 +87,11 @@ devtools::<span class="kw">install_github</span>(<span class="st">"WeigeHuangEco
 tvals &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">10</span>,<span class="dv">12</span>,<span class="dt">length.out=</span><span class="dv">10</span>)
 yvals &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">quantile</span>(igm$lcfincome, .<span class="dv">05</span>), <span class="kw">quantile</span>(igm$lcfincome, .<span class="dv">95</span>), <span class="dt">length.out=</span><span class="dv">50</span>)
 ## This line doesn't adjust for any covariates
-obs.dist &lt;-<span class="st"> </span><span class="kw">cfa</span>(lcfincome ~<span class="st"> </span>lfincome, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">data=</span>igm, <span class="dt">iters=</span><span class="dv">25</span>)
+obs.dist &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ccfa/topics/cfa">cfa</a></span>(lcfincome ~<span class="st"> </span>lfincome, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">data=</span>igm, <span class="dt">iters=</span><span class="dv">25</span>)
 <span class="co">#&gt; boostrapping standard errors...</span>
 
 ## This line adjusts for differences in education
-cf.dist &lt;-<span class="st"> </span><span class="kw">cfa</span>(lcfincome ~<span class="st"> </span>lfincome, ~HEDUC, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">data=</span>igm, <span class="dt">iters=</span><span class="dv">25</span>)
+cf.dist &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ccfa/topics/cfa">cfa</a></span>(lcfincome ~<span class="st"> </span>lfincome, ~HEDUC, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">data=</span>igm, <span class="dt">iters=</span><span class="dv">25</span>)
 <span class="co">#&gt; boostrapping standard errors...</span>
 <span class="kw">class</span>(cf.dist)
 <span class="co">#&gt; [1] "CFA"</span>
@@ -131,7 +131,7 @@ out &lt;-<span class="st"> </span><span class="kw"><a href="reference/cfa.html">
 <img src="reference/figures/README-plottest-1.png">
 </div>
 <p>As a final example, we show how to compute counterfactual distributions using local linear regression. The computation is a bit slower, so we do not plot standard errors here.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">llres &lt;-<span class="st"> </span><span class="kw">cfa</span>(lcfincome ~<span class="st"> </span>lfincome, ~HEDUC, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">method=</span><span class="st">"ll"</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">data=</span>igm)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">llres &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/ccfa/topics/cfa">cfa</a></span>(lcfincome ~<span class="st"> </span>lfincome, ~HEDUC, <span class="dt">tvals=</span>tvals, <span class="dt">yvals=</span>yvals, <span class="dt">method=</span><span class="st">"ll"</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">data=</span>igm)
 <span class="co">#&gt; [1] "computing local linear distribution regression"</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/ggplot2.CFA.html">ggplot2.CFA</a></span>(<span class="kw"><a href="reference/getRes.CFA.html">getRes.CFA</a></span>(llres, E, <span class="dt">se=</span><span class="ot">FALSE</span>))</code></pre></div>
 <div class="figure">
