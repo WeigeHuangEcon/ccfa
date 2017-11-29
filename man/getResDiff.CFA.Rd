@@ -32,7 +32,7 @@ yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.
 
 ## obtain counterfactual results
 out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
-xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+xformla2=~HEDUC, method2="qr", iters=10, tau1=seq(.05,.95,.05),
 tau2=seq(.05,.95,.05))
 
 ## get the difference between the average that adjusts for covariates and
