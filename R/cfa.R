@@ -203,23 +203,26 @@ CFA.OBJ <- function(tvals, distcondt, bootiterlist=NULL, tvallist=NULL, coef=NUL
 #'
 #' @return CFASE object
 #' @examples
-#' \dontrun{
+#' data(igm)
+#' tvals <- seq(10,12,length.out=8)
+#' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95),
+#'   length.out=50)
+#' 
 #' ## obtain counterfactual results
 #' cfaresults <- cfa(lcfincome ~ lfincome, tvals=tvals, yvals=yvals, data=igm,
 #'  se=FALSE)
 #'
 #' ## get the average outcome (lfincome) as a function of the treatment
 #' ## variable (lfincome)
-#' getRes.CFA(cfaresults, E)
+#' getRes.CFA(cfaresults, E, se=FALSE)
 #'
 #' ## get the variance of the outcomes as a function of the treatment
 #' ## variable
-#' getRes.CFA(cfaresults, Var)
+#' getRes.CFA(cfaresults, Var, se=FALSE)
 #'
 #' ## get the inter-quantile range of outcomes as a function of the
 #' ## treatment variable
-#' getRes.CFA(cfaresults, IQR, t1=0.9, t2=0.1)
-#' }
+#' getRes.CFA(cfaresults, IQR, se=FALSE, t1=0.9, t2=0.1)
 #' 
 #' @export
 getRes.CFA <- function(cfaobj, fun, se=T,  ...) {
@@ -258,7 +261,11 @@ getRes.CFA <- function(cfaobj, fun, se=T,  ...) {
 #'
 #' @return CFASE object
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' data(igm)
+#' tvals <- seq(10,12,length.out=8)
+#' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
+#' 
 #' ## obtain counterfactual results
 #' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
 #' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
@@ -361,11 +368,14 @@ getCoef.CFA <- function(cfaobj, yvals, se=T,  ...) {
 #' @return list of two CFA objects
 #'
 #' @examples
-#' \dontrun{
-#' ## obtain counterfactual results
+#' #' data(igm)
+#' tvals <- seq(10,12,length.out=8)
+#' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
+#' 
+#' ## obtain counterfactual results using quantile regression with
+#' ## no covariates and adjusting for education
 #' cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr", xformla2=~HEDUC,
-#' method2="qr", iters=100, tau1=seq(.05,.95,.05), tau2=seq(.05,.95,.05))
-#' }
+#' method2="qr", se=FALSE, tau1=seq(.1,.9,.1), tau2=seq(.1,.9,.1))
 #'
 #' @export
 cfa2 <- function(formla, tvals, yvals, data, 
@@ -452,9 +462,12 @@ cfa2 <- function(formla, tvals, yvals, data,
 #' @return CFASE object
 #'
 #' @examples
-#' \dontrun{
-#' ## obtain counterfactual results
+#' \donttest{
 #' data(igm)
+#' tvals <- seq(10,12,length.out=8)
+#' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
+#' 
+#' ## obtain counterfactual results
 #' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
 #' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
 #' tau2=seq(.05,.95,.05))
@@ -502,7 +515,10 @@ test.CFA <- function(cfaobj, fun, allt, se=T,  ...) {
 #' @return a CFASE object
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' data(igm)
+#' tvals <- seq(10,12,length.out=8)
+#' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
 #' ## obtain counterfactual results
 #' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
 #' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
@@ -551,7 +567,11 @@ lige <- function(cfaobj, h, se=T) {
 #' @return a CFASE object
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' data(igm)
+#' tvals <- seq(10,12,length.out=8)
+#' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
+#' 
 #' ## obtain counterfactual results
 #' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
 #' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
@@ -611,7 +631,11 @@ Diff.lige <- function(cfaobj1, cfaobj2, se=T, h) {
 #' @return a CFASE object
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' data(igm)
+#' tvals <- seq(10,12,length.out=8)
+#' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
+#' 
 #' ## obtain counterfactual results
 #' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
 #' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
@@ -694,7 +718,11 @@ CFASE <- function(tvals, est, se=NULL, c=NULL) {
 #' @return ggplot2 object
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
+#' data(igm)
+#' tvals <- seq(10,12,length.out=8)
+#' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
+#' 
 #' ## obtain counterfactual results
 #' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
 #' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
