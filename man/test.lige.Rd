@@ -23,7 +23,7 @@ test if the local intergnerational elasticity is the same across
  all values of the treatment variable
 }
 \examples{
-\donttest{
+\dontrun{
 data(igm)
 tvals <- seq(10,12,length.out=8)
 yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)

@@ -25,7 +25,7 @@ CFASE object
 Get the difference between two CFA objects
 }
 \examples{
-\donttest{
+\dontrun{
 data(igm)
 tvals <- seq(10,12,length.out=8)
 yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)

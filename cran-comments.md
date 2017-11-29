@@ -6,10 +6,10 @@
 ## R CMD check results
 
 * This is a new package
-* Local: 0 ERRORs | 0 WARNINGs | 2 NOTES.
+* Local: 0 ERRORs | 0 WARNINGs | 1 NOTES.
 
     * New submission
-    * Examples with CPU or elapsed time > 5s, but these are all marked as donttest
+    
 * Win-builder generated 1 NOTE
 
     * possibly misspelled words in DESCRIPTION but the spelling is correct

@@ -22,7 +22,7 @@ a CFASE object
 compute the difference between two estimates of the LIGE
 }
 \examples{
-\donttest{
+\dontrun{
 data(igm)
 tvals <- seq(10,12,length.out=8)
 yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
