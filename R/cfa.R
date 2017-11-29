@@ -261,7 +261,7 @@ getRes.CFA <- function(cfaobj, fun, se=T,  ...) {
 #'
 #' @return CFASE object
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' data(igm)
 #' tvals <- seq(10,12,length.out=8)
 #' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
@@ -462,7 +462,7 @@ cfa2 <- function(formla, tvals, yvals, data,
 #' @return CFASE object
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' data(igm)
 #' tvals <- seq(10,12,length.out=8)
 #' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
@@ -515,7 +515,7 @@ test.CFA <- function(cfaobj, fun, allt, se=T,  ...) {
 #' @return a CFASE object
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' data(igm)
 #' tvals <- seq(10,12,length.out=8)
 #' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
@@ -567,7 +567,7 @@ lige <- function(cfaobj, h, se=T) {
 #' @return a CFASE object
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' data(igm)
 #' tvals <- seq(10,12,length.out=8)
 #' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
@@ -631,7 +631,7 @@ Diff.lige <- function(cfaobj1, cfaobj2, se=T, h) {
 #' @return a CFASE object
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' data(igm)
 #' tvals <- seq(10,12,length.out=8)
 #' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
@@ -718,7 +718,7 @@ CFASE <- function(tvals, est, se=NULL, c=NULL) {
 #' @return ggplot2 object
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' data(igm)
 #' tvals <- seq(10,12,length.out=8)
 #' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
