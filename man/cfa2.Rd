@@ -69,6 +69,6 @@ yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.
 ## obtain counterfactual results using quantile regression with
 ## no covariates and adjusting for education
 cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr", xformla2=~HEDUC,
-method2="qr", se=FALSE, tau1=seq(.05,.95,.05), tau2=seq(.05,.95,.05))
+method2="qr", se=FALSE, tau1=seq(.1,.9,.1), tau2=seq(.1,.9,.1))
 
 }

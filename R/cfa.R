@@ -268,7 +268,7 @@ getRes.CFA <- function(cfaobj, fun, se=T,  ...) {
 #' 
 #' ## obtain counterfactual results
 #' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
-#' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+#' xformla2=~HEDUC, method2="qr", iters=10, tau1=seq(.05,.95,.05),
 #' tau2=seq(.05,.95,.05))
 #'
 #' ## get the difference between the average that adjusts for covariates and
@@ -469,7 +469,7 @@ cfa2 <- function(formla, tvals, yvals, data,
 #' 
 #' ## obtain counterfactual results
 #' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
-#' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+#' xformla2=~HEDUC, method2="qr", iters=10, tau1=seq(.05,.95,.05),
 #' tau2=seq(.05,.95,.05))
 #' test.CFA(out$cfa1, Var, igm$lfincome)
 #' }
@@ -521,7 +521,7 @@ test.CFA <- function(cfaobj, fun, allt, se=T,  ...) {
 #' yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
 #' ## obtain counterfactual results
 #' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
-#' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+#' xformla2=~HEDUC, method2="qr", iters=10, tau1=seq(.05,.95,.05),
 #' tau2=seq(.05,.95,.05))
 #' lige(out$cfa1, h=0.5)
 #' }
@@ -574,7 +574,7 @@ lige <- function(cfaobj, h, se=T) {
 #' 
 #' ## obtain counterfactual results
 #' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
-#' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+#' xformla2=~HEDUC, method2="qr", iters=10, tau1=seq(.05,.95,.05),
 #' tau2=seq(.05,.95,.05))
 #' Diff.lige(out$cfa1, out$cfa2, h=0.5)
 #' }
@@ -638,7 +638,7 @@ Diff.lige <- function(cfaobj1, cfaobj2, se=T, h) {
 #' 
 #' ## obtain counterfactual results
 #' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
-#' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+#' xformla2=~HEDUC, method2="qr", iters=10, tau1=seq(.05,.95,.05),
 #' tau2=seq(.05,.95,.05))
 #' test.lige(out$cfa1, allt=igm$lfincome, h=0.5)
 #' }
@@ -725,7 +725,7 @@ CFASE <- function(tvals, est, se=NULL, c=NULL) {
 #' 
 #' ## obtain counterfactual results
 #' out <- cfa2(lcfincome ~ lfincome, tvals, yvals, igm, method1="qr",
-#' xformla2=~HEDUC, method2="qr", iters=100, tau1=seq(.05,.95,.05),
+#' xformla2=~HEDUC, method2="qr", iters=10, tau1=seq(.05,.95,.05),
 #' tau2=seq(.05,.95,.05))
 #'
 #' ## get the difference between the average that adjusts for covariates and
