@@ -9,5 +9,5 @@ utils::globalVariables(c("k","v"))
 #' @import BMisc
 #' @import quantreg
 #' @import TempleMetrics
-#' @import formula.tools
+#' @importFrom formula.tools lhs
 NULL

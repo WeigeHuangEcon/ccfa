@@ -63,7 +63,7 @@ the same as cfa method except it computes two results at the
 }
 \examples{
 #' data(igm)
-tvals <- seq(10,12,length.out=8)
+tvals <- seq(10,12,length.out=5)
 yvals <- seq(quantile(igm$lcfincome, .05), quantile(igm$lcfincome, .95), length.out=50)
 
 ## obtain counterfactual results using quantile regression with
