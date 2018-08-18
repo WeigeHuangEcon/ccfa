@@ -16,5 +16,4 @@ Imports: quantreg,
     ggplot2,
     TempleMetrics,
     formula.tools
-RoxygenNote: 6.0.1
-
+RoxygenNote: 6.0.1.9000
