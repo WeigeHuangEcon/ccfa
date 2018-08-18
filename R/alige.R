@@ -25,11 +25,13 @@ localIGE.inner <- function(t, Y, T, Xmat, h) {
 #' @title localIGE
 #' @description localIGE
 #' @param tvals a grid of values of treatment variable
+#' @param cl number of cores to use
 #' @inheritParams localIGE.inner
 #' @return
 #' @export
 # local ige at a grid of t's
 localIGE <- function(tvals, Y, T, Xmat,h,cl=1) {
+  library(pbsapply)
   pbsapply(tvals, localIGE.inner, Y=Y, T=T, Xmat=Xmat,cl=cl,h)
 }
 
