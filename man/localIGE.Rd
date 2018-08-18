@@ -16,6 +16,8 @@ localIGE(tvals, Y, T, Xmat, h, cl = 1)
 \item{Xmat}{covariates}
 
 \item{h}{bandwidth}
+
+\item{cl}{number of cores to use}
 }
 \description{
 localIGE

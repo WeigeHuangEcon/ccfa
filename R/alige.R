@@ -13,7 +13,7 @@
 
 # local ige at t
 localIGE.inner <- function(t, Y, T, Xmat, h) {
-  devtools::install_github("bcallaway11/TempleMetrics")
+  #devtools::install_github("bcallaway11/TempleMetrics")
   dd <- llscm(t,Y,T,Xmat,h)
   xbar <- as.matrix(apply(Xmat, 2, mean))
   # m <- ncol(xmat)
@@ -31,7 +31,8 @@ localIGE.inner <- function(t, Y, T, Xmat, h) {
 #' @export
 # local ige at a grid of t's
 localIGE <- function(tvals, Y, T, Xmat,h,cl=1) {
-  library(pbsapply)
+  #install.packages("pbapply")
+  library(pbapply)
   pbsapply(tvals, localIGE.inner, Y=Y, T=T, Xmat=Xmat,cl=cl,h)
 }
 
