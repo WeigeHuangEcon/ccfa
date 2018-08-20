@@ -4,16 +4,16 @@
 \alias{localIGE.inner}
 \title{localIGE.inner}
 \usage{
-localIGE.inner(t, Y, T, Xmat, h)
+localIGE.inner(formla, xformla, data, t, h)
 }
 \arguments{
-\item{t}{conditional at a value T=t}
+\item{formla}{a formula y ~ treatment}
 
-\item{Y}{outcome variable}
+\item{xformla}{one sided formula for x variables to include, e.g. ~x1 + x2}
 
-\item{T}{treatment variable}
+\item{data}{the data.frame where y, t, and x are}
 
-\item{Xmat}{covariates}
+\item{t}{conditional at a value T=t (i.e. should be scalar)}
 
 \item{h}{bandwidth}
 }
@@ -23,3 +23,4 @@ lige
 \description{
 local intergenerational elasticities
 }
+\keyword{internal}

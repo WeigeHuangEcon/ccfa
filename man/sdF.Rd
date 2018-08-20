@@ -4,18 +4,18 @@
 \alias{sdF}
 \title{sdF}
 \usage{
-sdF(B, tvals, Y, T, Xmat, h)
+sdF(B, formla, xformla, data, tvals, h)
 }
 \arguments{
 \item{B}{number of bootstrap iterations}
 
+\item{formla}{a formula y ~ treatment}
+
+\item{xformla}{one sided formula for x variables to include, e.g. ~x1 + x2}
+
+\item{data}{the data.frame where y, t, and x are}
+
 \item{tvals}{a grid of values of treatment variable}
-
-\item{Y}{outcome variable}
-
-\item{T}{treatment variable}
-
-\item{Xmat}{covariates}
 
 \item{h}{bandwidth}
 }
@@ -24,4 +24,16 @@ sd
 }
 \description{
 using wild bootstrap to obtain standard deviation
+}
+\examples{
+data(igm)
+igm$hs=ifelse(igm$HEDUC=="HS",1,0)
+igm$col=ifelse(igm$HEDUC=="COL",1,0)
+formla=lcfincome~lfincome
+xformla=~hs+col
+tvals=seq(quantile(igm$lfincome,probs = 0.1),quantile(igm$lfincome,probs = 0.9),length.out = 10)
+h=1.2
+data=igm
+B=7
+sdF(B,formla=formla, xformla=xformla, data=data,tvals=tvals,h=h)
 }

@@ -4,21 +4,36 @@
 \alias{localIGE}
 \title{localIGE}
 \usage{
-localIGE(tvals, Y, T, Xmat, h, cl = 1)
+localIGE(formla, xformla, data, tvals, h, cl = 1)
 }
 \arguments{
+\item{formla}{a formula y ~ treatment}
+
+\item{xformla}{one sided formula for x variables to include, e.g. ~x1 + x2}
+
+\item{data}{the data.frame where y, t, and x are}
+
 \item{tvals}{a grid of values of treatment variable}
-
-\item{Y}{outcome variable}
-
-\item{T}{treatment variable}
-
-\item{Xmat}{covariates}
 
 \item{h}{bandwidth}
 
-\item{cl}{number of cores to use}
+\item{cl}{the number of clusters to use, default is 1}
+}
+\value{
+lige
 }
 \description{
-localIGE
+Computes local intergenerational elasticities
+}
+\examples{
+data(igm)
+igm$hs=ifelse(igm$HEDUC=="HS",1,0)
+igm$col=ifelse(igm$HEDUC=="COL",1,0)
+formla=lcfincome~lfincome
+xformla=~hs+col
+tvals=seq(quantile(igm$lfincome,probs = 0.1),quantile(igm$lfincome,probs = 0.9),length.out = 10)
+h=1.2
+cl=1
+data=igm
+localIGE(formla=formla, xformla=xformla, data=data,tvals=tvals,h=h,cl=cl)
 }
