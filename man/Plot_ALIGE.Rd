@@ -25,8 +25,9 @@ plot ALIGE with 95\% confidence intervals
 data(igm)
 igm$hs=ifelse(igm$HEDUC=="HS",1,0)
 igm$col=ifelse(igm$HEDUC=="COL",1,0)
+igm$const=1
 formla=lcfincome~lfincome
-xformla=~hs+col
+xformla=~const+hs+col
 tvals=seq(quantile(igm$lfincome,probs = 0.1),quantile(igm$lfincome,probs = 0.9),length.out = 10)
 h=1.2
 data=igm
