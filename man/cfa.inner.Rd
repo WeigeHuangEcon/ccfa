@@ -4,9 +4,9 @@
 \alias{cfa.inner}
 \title{cfa.inner}
 \usage{
-cfa.inner(tvals, yvals, data, yname, tname, xnames = NULL, method = "dr",
-  link = "logit", tau = seq(0.01, 0.99, 0.01), condDistobj = NULL,
-  se = TRUE, iters = 100, cl = 1)
+cfa.inner(tvals, yvals, data, yname, tname, xnames = NULL,
+  method = "dr", link = "logit", tau = seq(0.01, 0.99, 0.01),
+  condDistobj = NULL, se = TRUE, iters = 100, cl = 1)
 }
 \arguments{
 \item{tvals}{the values of the "treatment" to compute parameters of

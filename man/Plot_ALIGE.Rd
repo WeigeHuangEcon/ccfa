@@ -4,14 +4,39 @@
 \alias{Plot_ALIGE}
 \title{Plot_ALIGE}
 \usage{
-Plot_ALIGE(ALIGE, sd_ALIGE)
+Plot_ALIGE(tvals, ALIGE, sd_ALIGE, xlab, ylab, ylim = c(0, 1))
 }
 \arguments{
+\item{tvals}{a grid of values of treatment variable}
+
+\item{ALIGE}{lige from}
+
 \item{sd_ALIGE}{SD of ALIGE}
+
+\item{xlab}{name of x axis}
+
+\item{ylab}{name of y axis}
+
+\item{ylim}{ranges of values for y axis}
 }
 \value{
 Plot of ALIGE
 }
 \description{
 plot ALIGE with 95\% confidence intervals
+}
+\examples{
+data(igm)
+igm$hs=ifelse(igm$HEDUC=="HS",1,0)
+igm$col=ifelse(igm$HEDUC=="COL",1,0)
+formla=lcfincome~lfincome
+xformla=~hs+col
+tvals=seq(quantile(igm$lfincome,probs = 0.1),quantile(igm$lfincome,probs = 0.9),length.out = 10)
+h=1.2
+data=igm
+cl=1
+B=7
+ALIGE=localIGE(formla=formla, xformla=xformla, data=data,tvals=tvals,h=h,cl=cl)
+sd_ALIGE=sdF(B,formla=formla, xformla=xformla, data=data,tvals=tvals,h=h)
+Plot_ALIGE(tvals,ALIGE,sd_ALIGE,xlab="t",ylab="ALIGE",ylim=c(0,1))
 }

@@ -4,8 +4,9 @@
 \alias{compute.cfa2}
 \title{compute.cfa2}
 \usage{
-compute.cfa2(tvals, yvals, data, yname, tname, xnames = NULL, method = "dr",
-  link = "logit", tau = seq(0.1, 0.99, 0.01), condDistobj = NULL)
+compute.cfa2(tvals, yvals, data, yname, tname, xnames = NULL,
+  method = "dr", link = "logit", tau = seq(0.1, 0.99, 0.01),
+  condDistobj = NULL)
 }
 \arguments{
 \item{tvals}{the values of the "treatment" to compute parameters of
