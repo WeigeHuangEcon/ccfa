@@ -4,7 +4,7 @@
 \alias{localIGE}
 \title{localIGE}
 \usage{
-localIGE(formla, xformla, data, tvals, h, cl = 1)
+localIGE(formla, xformla = NULL, data, tvals, h = NULL, cl = 1)
 }
 \arguments{
 \item{formla}{a formula y ~ treatment}
@@ -29,9 +29,8 @@ Computes local intergenerational elasticities
 data(igm)
 igm$hs=ifelse(igm$HEDUC=="HS",1,0)
 igm$col=ifelse(igm$HEDUC=="COL",1,0)
-igm$const=1
 formla=lcfincome~lfincome
-xformla=~const+hs+col
+xformla=~hs+col
 tvals=seq(quantile(igm$lfincome,probs = 0.1),quantile(igm$lfincome,probs = 0.9),length.out = 10)
 h=1.2
 cl=1

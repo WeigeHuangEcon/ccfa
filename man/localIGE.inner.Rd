@@ -4,7 +4,7 @@
 \alias{localIGE.inner}
 \title{localIGE.inner}
 \usage{
-localIGE.inner(formla, xformla, data, t, h)
+localIGE.inner(formla, xformla = NULL, data, t, h = NULL)
 }
 \arguments{
 \item{formla}{a formula y ~ treatment}

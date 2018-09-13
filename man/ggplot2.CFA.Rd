@@ -4,8 +4,8 @@
 \alias{ggplot2.CFA}
 \title{ggplot2.CFA}
 \usage{
-ggplot2.CFA(cfaseobj, setype = "pointwise", ylim = NULL, xlabel = NULL,
-  ylabel = NULL, legend = FALSE)
+ggplot2.CFA(cfaseobj, setype = "pointwise", ylim = NULL,
+  xlabel = NULL, ylabel = NULL, legend = FALSE)
 }
 \arguments{
 \item{cfaseobj}{a CFASE object to plot}

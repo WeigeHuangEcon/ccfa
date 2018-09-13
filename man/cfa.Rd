@@ -3,7 +3,6 @@
 \docType{package}
 \name{cfa}
 \alias{cfa}
-\alias{cfa}
 \alias{cfa-package}
 \title{cfa}
 \usage{
@@ -46,8 +45,6 @@ CFA object
 \description{
 compute counterfactuals using distribution regression
  with a continuous treatment
-
-cfa: A package for computing counterfactuals with a continuous treatment
 }
 \examples{
 data(igm)

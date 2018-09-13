@@ -11,14 +11,29 @@
 #'
 #' @keywords internal
 #' @export
-localIGE.inner <- function(formla,xformla, data,t, h) {
-  dd <- TempleMetrics::llscm(formla,xformla,data,t,h)
-  X=model.frame(terms(xformla,data=data),data=data)
-  Xmat=as.matrix(X)
-  xbar <- as.matrix(apply(Xmat, 2, mean))
-  m <- ncol(Xmat)
-  d <- dd[(m+1):length(dd)]
-  t(xbar)%*%d
+localIGE.inner <- function(formla,xformla=NULL, data,t, h=NULL) {
+  formla=as.formula(formla)
+  YT=model.frame(terms(formla,data=data),data=data)
+  Y=YT[,1]
+  T=YT[,2]
+  n=length(Y)
+  if (is.null(h)) {
+    h <- 1.06*sd(T)*n^(-1/5) ## check that this is right
+  }
+
+  if(is.null(xformla)){
+    dd <- TempleMetrics::llscm(formla,xformla,data,t,h)
+    dd[2]
+  } else {
+    xformla=as.formula(xformla)
+    dd <- TempleMetrics::llscm(formla,xformla,data,t,h)
+    X=model.frame(terms(xformla,data=data),data=data)
+    Xmat=as.matrix(X)
+    xbar <- as.matrix(apply(Xmat, 2, mean))
+    m <- ncol(Xmat)
+    d <- dd[(m+2):length(dd)]
+    t(xbar)%*%d
+  }
 }
 
 #' @title localIGE
@@ -31,9 +46,8 @@ localIGE.inner <- function(formla,xformla, data,t, h) {
 #' data(igm)
 #' igm$hs=ifelse(igm$HEDUC=="HS",1,0)
 #' igm$col=ifelse(igm$HEDUC=="COL",1,0)
-#' igm$const=1
 #' formla=lcfincome~lfincome
-#' xformla=~const+hs+col
+#' xformla=~hs+col
 #' tvals=seq(quantile(igm$lfincome,probs = 0.1),quantile(igm$lfincome,probs = 0.9),length.out = 10)
 #' h=1.2
 #' cl=1
@@ -41,22 +55,42 @@ localIGE.inner <- function(formla,xformla, data,t, h) {
 #' localIGE(formla=formla, xformla=xformla, data=data,tvals=tvals,h=h,cl=cl)
 #' @export
 
-
 # local ige at a grid of t's
 #localIGE <- function(tvals, Y, T, Xmat,h,cl=1) {
 #  pbapply::pbsapply(tvals, localIGE.inner, Y=Y, T=T, Xmat=Xmat,cl=cl,h)
 #}
 
-localIGE <- function(formla, xformla, data,tvals,h,cl=1) {
-  formla=as.formula(formla)
-  xformla=as.formula(xformla)
-  YT=model.frame(terms(formla,data=data),data=data)
-  X=model.frame(terms(xformla,data=data),data=data)
-  Y=YT[,1]
-  T=YT[,2]
-  Xmat=as.matrix(X)
+localIGE <- function(formla, xformla=NULL, data,tvals,h=NULL,cl=1) {
   cl=cl
-  pbapply::pbsapply(tvals, localIGE.inner,formla=formla, xformla=xformla, data=data ,h=h,cl=cl)
+ out<- pbapply::pbsapply(tvals, localIGE.inner,formla=formla, xformla=xformla, data=data ,h=h,cl=cl)
+ class(out)<-"localIGE"
+ out
+}
+
+#' @title summary_localIGE
+#'
+#' @description prints a summary of a \code{localIGE} object
+#'
+#' @param object an \code{localIGE} object
+#' @param ... extra arguments
+#' @examples
+#' data(igm)
+#' igm$hs=ifelse(igm$HEDUC=="HS",1,0)
+#' igm$col=ifelse(igm$HEDUC=="COL",1,0)
+#' formla=lcfincome~lfincome
+#' xformla=~hs+col
+#' tvals=seq(quantile(igm$lfincome,probs = 0.1),quantile(igm$lfincome,probs = 0.9),length.out = 10)
+#' h=1.2
+#' cl=1
+#' data=igm
+#' object=localIGE(formla=formla, xformla=xformla, data=data,tvals=tvals,h=h,cl=cl)
+#' summary_localIGE (object)
+#' @export
+#'
+
+summary_localIGE <- function(object, ...) {
+  citation()
+  object
 }
 
 # wild bootstrap
@@ -70,9 +104,8 @@ localIGE <- function(formla, xformla, data,tvals,h,cl=1) {
 #' data(igm)
 #' igm$hs=ifelse(igm$HEDUC=="HS",1,0)
 #' igm$col=ifelse(igm$HEDUC=="COL",1,0)
-#' igm$const=1
 #' formla=lcfincome~lfincome
-#' xformla=~const+hs+col
+#' xformla=~hs+col
 #' tvals=seq(quantile(igm$lfincome,probs = 0.1),quantile(igm$lfincome,probs = 0.9),length.out = 10)
 #' h=1.2
 #' data=igm
@@ -80,75 +113,145 @@ localIGE <- function(formla, xformla, data,tvals,h,cl=1) {
 #' sdF(B,formla=formla, xformla=xformla, data=data,tvals=tvals,h=h)
 #' @export
 # a function used to compute standard divation of ALIGE
-sdF=function(B,formla, xformla, data,tvals,h){
-  formla=as.formula(formla)
-  xformla=as.formula(xformla)
-  YT=model.frame(terms(formla,data=data),data=data)
-  X=model.frame(terms(xformla,data=data),data=data)
-  Y=YT[,1]
-  T=YT[,2]
-  Xmat=as.matrix(X)
 
-  llscm_wb <- function(t, Y, T, Xmat, h) {
-    dd <- TempleMetrics::llscm.inner(t, Y, T, Xmat, h)
-    X <- cbind(Xmat, (T - t)*Xmat)
-    y <- as.matrix(Y)
+sdF=function(B,formla, xformla, data,tvals,h,cl=1){
+
+  sdF_t=function(formla, xformla, data,t,h){
+    coef=TempleMetrics::llscm(formla,xformla,data,t,h)
+    formla=as.formula(formla)
+    YT=model.frame(terms(formla,data=data),data=data)
+    Y=YT[,1]
+    T=YT[,2]
+    n=length(Y)
     if (is.null(h)) {
       h <- 1.06*sd(T)*n^(-1/5) ## check that this is right
     }
-    K <- diag(TempleMetrics::k(T-t, h=h, type="gaussian"))
-    u=y-X%*%dd
-    v=c(-(sqrt(5)-1)/2,(sqrt(5)+1)/2)
-    b_v=rbinom(nrow(X), 1, prob=(sqrt(5)+1)/(2*sqrt(5)))
-    b_v=ifelse(b_v==1,v[1],v[2])
-    yhat=X%*%dd + u*b_v
-    d <- solve(t(X)%*%K%*%X)%*%t(X)%*%K%*%yhat
-    d
+    if(is.null(xformla)){
+      X=cbind(1,T-t)
+      u=Y-X%*%coef
+      v=c(-(sqrt(5)-1)/2,(sqrt(5)+1)/2)
+      b_v=rbinom(nrow(X), 1, prob=(sqrt(5)+1)/(2*sqrt(5)))
+      b_v=ifelse(b_v==1,v[1],v[2])
+      yhat=X%*%coef + u*b_v
+      K <- diag(TempleMetrics::k(T-t, h=h, type="gaussian"))
+      d <- solve(t(X)%*%K%*%X)%*%t(X)%*%K%*%yhat
+      d[2]
+    } else {
+      xformla=as.formula(xformla)
+      X=model.frame(terms(xformla,data=data),data=data)
+      Xmat=cbind(1,X,X*(T-t))
+      Xmat=as.matrix(Xmat)
+      u=Y-Xmat%*%coef
+      v=c(-(sqrt(5)-1)/2,(sqrt(5)+1)/2)
+      b_v=rbinom(nrow(X), 1, prob=(sqrt(5)+1)/(2*sqrt(5)))
+      b_v=ifelse(b_v==1,v[1],v[2])
+      yhat=Xmat%*%coef + u*b_v
+      K <- diag(TempleMetrics::k(T-t, h=h, type="gaussian"))
+      dd <- solve(t(Xmat)%*%K%*%Xmat)%*%t(Xmat)%*%K%*%yhat
+      xbar <- as.matrix(apply(X, 2, mean))
+      m <- ncol(X)
+      d <- dd[(m+2):length(dd)]
+      t(xbar)%*%d
+    }
   }
-
-  localIGE.inner_wb <- function(t, Y, T, Xmat, h) {
-    dd <- llscm_wb(t,Y,T,Xmat,h)
-    xbar <- as.matrix(apply(Xmat, 2, mean))
-    m <- ncol(Xmat)
-    d <- dd[(m+1):length(dd)]
-    t(xbar)%*%d
-  }
-
-  localIGE_wb <- function(tvals, Y, T, Xmat,h) {
+  sdF_ts<- function(tvals) {
     seq=tvals
     for (i in 1:length(tvals)) {
-      seq[i]=localIGE.inner_wb(tvals[i], Y, T, Xmat, h)
+      seq[i]=sdF_t(formla=formla, xformla=xformla, data=data,t=tvals[i],h=h)
     }
     seq
   }
-  #library(foreach)
-  #library(doParallel)
+
+  # library(foreach)
+  # library(doParallel)
   no_cores <- parallel::detectCores() - 1
   cl<-parallel::makeCluster(no_cores)
   doParallel::registerDoParallel(cl)
   #doParallel::registerDoParallel(no_cores)
   bmat=foreach(1:B,.combine = rbind)  %dopar%
-    localIGE_wb(tvals, Y, T, Xmat,h)
+    sdF_ts(tvals)
   stopImplicitCluster()
 
   sd=apply(bmat, 2, sd)
+  class(sd)<-"sdF"
   sd
 }
+
+
+
+#' @title LLIGE
+#' @description Computes local intergenerational elasticities and its Standard Deviations
+#' @param B number of bootstrap iterations
+#' @inheritParams localIGE
+#' @return LLIGE AND its SD
+#' @examples
+#' data(igm)
+#' igm$hs=ifelse(igm$HEDUC=="HS",1,0)
+#' igm$col=ifelse(igm$HEDUC=="COL",1,0)
+#' formla=lcfincome~lfincome
+#' xformla=~hs+col
+#' tvals=seq(quantile(igm$lfincome,probs = 0.1),quantile(igm$lfincome,probs = 0.9),length.out = 10)
+#' h=1.2
+#' data=igm
+#' B=7
+#' cl=1
+#' LLIGE(B,formla=formla, xformla=xformla, data=data,tvals=tvals,h=h,cl=cl)
+#' @export
+#'
+
+LLIGE=function(B,formla, xformla, data,tvals,h,cl){
+ llige=localIGE(formla, xformla, data,tvals,h,cl=cl)
+# names(llige)="llige"
+ sd=sdF(B,formla, xformla, data,tvals,h)
+# names(sd)="SD"
+ out=list(llige=llige,SD=sd)
+ class(out)<-"LLIGE"
+ out
+}
+
+#' @title summary_LLIGE
+#'
+#' @description prints a summary of a \code{LLIGE} object
+#' @param object an \code{LLIGE} object
+#' @param ... extra arguments
+#' @return summary of \code{LLIGE}
+#' @examples
+#' data(igm)
+#' igm$hs=ifelse(igm$HEDUC=="HS",1,0)
+#' igm$col=ifelse(igm$HEDUC=="COL",1,0)
+#' formla=lcfincome~lfincome
+#' xformla=~hs+col
+#' tvals=seq(quantile(igm$lfincome,probs = 0.1),quantile(igm$lfincome,probs = 0.9),length.out = 10)
+#' h=1.2
+#' data=igm
+#' B=7
+#' cl=1
+#' object=LLIGE(B,formla=formla, xformla=xformla, data=data,tvals=tvals,h=h,cl=cl)
+#' summary_LLIGE(object)
+#' @export
+
+summary_LLIGE <- function(object, ...) {
+  citation()
+  object
+}
+
+
 
 #' @title Plot_ALIGE
 #' @description plot ALIGE with 95\% confidence intervals
 #' @param ALIGE lige from
 #' @param sd_ALIGE SD of ALIGE
+#' @param ylim ranges of values for y axis
 #' @param xlab name of x axis
 #' @param ylab name of y axis
+#' @inheritParams localIGE
 #' @return Plot of ALIGE
 #' @examples
 #' data(igm)
 #' igm$hs=ifelse(igm$HEDUC=="HS",1,0)
 #' igm$col=ifelse(igm$HEDUC=="COL",1,0)
-#' igm$const=1
 #' formla=lcfincome~lfincome
-#' xformla=~const+hs+col
+#' xformla=~hs+col
 #' tvals=seq(quantile(igm$lfincome,probs = 0.1),quantile(igm$lfincome,probs = 0.9),length.out = 10)
 #' h=1.2
 #' data=igm
@@ -156,10 +259,10 @@ sdF=function(B,formla, xformla, data,tvals,h){
 #' B=7
 #' ALIGE=localIGE(formla=formla, xformla=xformla, data=data,tvals=tvals,h=h,cl=cl)
 #' sd_ALIGE=sdF(B,formla=formla, xformla=xformla, data=data,tvals=tvals,h=h)
-#' Plot_ALIGE(ALIGE,sd_ALIGE,xlab="t",ylab="ALIGE")
+#' Plot_ALIGE(tvals,ALIGE,sd_ALIGE,xlab="t",ylab="ALIGE",ylim=c(0,1))
 #' @export
 #'
-Plot_ALIGE=function(ALIGE,sd_ALIGE,xlab,ylab){
+Plot_ALIGE=function(tvals,ALIGE,sd_ALIGE,xlab,ylab,ylim=c(0,1)){
   #library(ggplot2)
   ALIGE_95=ALIGE+1.96*sd_ALIGE
   ALIGE_5=ALIGE-1.96*sd_ALIGE
@@ -170,7 +273,7 @@ Plot_ALIGE=function(ALIGE,sd_ALIGE,xlab,ylab){
     #geom_point(aes(tvals,ALIGE_95,color=2),lwd=1.4)+
     geom_line(data = res, aes(x = tvals, y = ALIGE_95), color = "black",lty=2,lwd=1.3) +
     geom_line(data = res, aes(x = tvals, y = ALIGE_5), color = "black",lty=2,lwd=1.3) +
-    scale_y_continuous(limits=c(0,1)) +
+    scale_y_continuous(limits=ylim) +
     xlab(xlab) +
     ylab(ylab) +
     theme_bw() +
