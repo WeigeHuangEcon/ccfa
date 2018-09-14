@@ -164,7 +164,19 @@ sdF=function(B,formla, xformla, data,tvals,h,cl=1){
 
   # library(foreach)
   # library(doParallel)
-  no_cores <- parallel::detectCores() - 1
+
+  chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+
+  if (nzchar(chk) && chk == "TRUE") {
+    # use 2 cores in CRAN/Travis/AppVeyor
+    num_workers <- 2L
+  } else {
+    # use all cores in devtools::test()
+    num_workers <- parallel::detectCores()
+  }
+  no_cores <- num_workers - 1
+
+  #no_cores <- parallel::detectCores() - 1
   cl<-parallel::makeCluster(no_cores)
   doParallel::registerDoParallel(cl)
   #doParallel::registerDoParallel(no_cores)

@@ -18,13 +18,22 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Function reference" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,12 +56,16 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">ccfa</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">ccfa</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.1.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -61,13 +74,14 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -75,142 +89,174 @@
       
       </header>
 
-      <div class="row">
-  <div class="col-md-9">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;1.0.0</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    <table class="ref-index">
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <colgroup>
+      
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="cfa2.html">cfa2</a></code> </p>
-          </td>
-          <td><p>cfa2</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="CFA.OBJ.html">CFA.OBJ</a></code> </p>
-          </td>
-          <td><p>CFA.OBJ</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="cfa.html">cfa</a></code> </p>
-          </td>
-          <td><p>cfa</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="CFASE.html">CFASE</a></code> </p>
-          </td>
-          <td><p>CFASE</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Diff.lige.html">Diff.lige</a></code> </p>
-          </td>
-          <td><p>Diff.lige</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="E.html">E</a></code> </p>
-          </td>
-          <td><p>E</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getCoef.CFA.html">getCoef.CFA</a></code> </p>
-          </td>
-          <td><p>getCoef.CFA</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getRes.CFA.html">getRes.CFA</a></code> </p>
-          </td>
-          <td><p>getRes.CFA</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="getResDiff.CFA.html">getResDiff.CFA</a></code> </p>
-          </td>
-          <td><p>getResDiff.CFA</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="ggplot2.CFA.html">ggplot2.CFA</a></code> </p>
-          </td>
-          <td><p>ggplot2.CFA</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="igm.html">igm</a></code> </p>
-          </td>
-          <td><p>Intergenerational Mobility data from the PSID</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="IQR.html">IQR</a></code> </p>
-          </td>
-          <td><p>IQR</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="lige.html">lige</a></code> </p>
-          </td>
-          <td><p>lige</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="pov.html">pov</a></code> </p>
-          </td>
-          <td><p>pov</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="rich.html">rich</a></code> </p>
-          </td>
-          <td><p>rich</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="test.CFA.html">test.CFA</a></code> </p>
-          </td>
-          <td><p>test.CFA</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="test.lige.html">test.lige</a></code> </p>
-          </td>
-          <td><p>test.lige</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="Var.html">Var</a></code> </p>
-          </td>
-          <td><p>Var</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="CFA.OBJ.html">CFA.OBJ()</a></code> </p>
+        </td>
+        <td><p>CFA.OBJ</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="CFASE.html">CFASE()</a></code> </p>
+        </td>
+        <td><p>CFASE</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Diff.lige.html">Diff.lige()</a></code> </p>
+        </td>
+        <td><p>Diff.lige</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="E.html">E()</a></code> </p>
+        </td>
+        <td><p>E</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="IQR.html">IQR()</a></code> </p>
+        </td>
+        <td><p>IQR</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="LLIGE.html">LLIGE()</a></code> </p>
+        </td>
+        <td><p>LLIGE</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Plot_ALIGE.html">Plot_ALIGE()</a></code> </p>
+        </td>
+        <td><p>Plot_ALIGE</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="Var.html">Var()</a></code> </p>
+        </td>
+        <td><p>Var</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="cfa.html">cfa()</a></code> </p>
+        </td>
+        <td><p>cfa</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="cfa2.html">cfa2()</a></code> </p>
+        </td>
+        <td><p>cfa2</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getCoef.CFA.html">getCoef.CFA()</a></code> </p>
+        </td>
+        <td><p>getCoef.CFA</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getRes.CFA.html">getRes.CFA()</a></code> </p>
+        </td>
+        <td><p>getRes.CFA</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getResDiff.CFA.html">getResDiff.CFA()</a></code> </p>
+        </td>
+        <td><p>getResDiff.CFA</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="ggplot2.CFA.html">ggplot2.CFA()</a></code> </p>
+        </td>
+        <td><p>ggplot2.CFA</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="igm.html">igm</a></code> </p>
+        </td>
+        <td><p>Intergenerational Mobility data from the PSID</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="lige.html">lige()</a></code> </p>
+        </td>
+        <td><p>lige</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="localIGE.html">localIGE()</a></code> </p>
+        </td>
+        <td><p>localIGE</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pov.html">pov()</a></code> </p>
+        </td>
+        <td><p>pov</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="rich.html">rich()</a></code> </p>
+        </td>
+        <td><p>rich</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="sdF.html">sdF()</a></code> </p>
+        </td>
+        <td><p>sdF</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="summary_LLIGE.html">summary_LLIGE()</a></code> </p>
+        </td>
+        <td><p>summary_LLIGE</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="summary_localIGE.html">summary_localIGE()</a></code> </p>
+        </td>
+        <td><p>summary_localIGE</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="test.CFA.html">test.CFA()</a></code> </p>
+        </td>
+        <td><p>test.CFA</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="test.lige.html">test.lige()</a></code> </p>
+        </td>
+        <td><p>test.lige</p></td>
+      </tr>
+    </tbody>
+    </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -227,11 +273,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

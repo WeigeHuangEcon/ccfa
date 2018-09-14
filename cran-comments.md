@@ -5,11 +5,7 @@
 
 ## R CMD check results
 
-* This is a new package
-* Local: 2 ERRORs | 0 WARNINGs | 1 NOTES.
-    * 2 Errors in .check_ncores(length(names)) : 7 simultaneous processes spawned are correct
-
-    * Non-standard file/directory found at top level: ‘Icon’
+* Local: 0 ERRORs | 0 WARNINGs | 0 NOTEs.
     
 * Win-builder generated 1 NOTE
 
