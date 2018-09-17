@@ -165,26 +165,30 @@ sdF=function(B,formla, xformla, data,tvals,h,cl=1){
   # library(foreach)
   # library(doParallel)
 
-  chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+  ## chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
 
-  if (nzchar(chk) && chk == "TRUE") {
-    # use 2 cores in CRAN/Travis/AppVeyor
-    num_workers <- 2L
-  } else {
-    # use all cores in devtools::test()
-    num_workers <- parallel::detectCores()
-  }
-  no_cores <- num_workers - 1
+  ## if (nzchar(chk) && chk == "TRUE") {
+  ##   # use 2 cores in CRAN/Travis/AppVeyor
+  ##   num_workers <- 2L
+  ## } else {
+  ##   # use all cores in devtools::test()
+  ##   num_workers <- parallel::detectCores()
+  ## }
+  ## no_cores <- num_workers - 1
 
-  #no_cores <- parallel::detectCores() - 1
-  cl<-parallel::makeCluster(no_cores)
-  doParallel::registerDoParallel(cl)
-  #doParallel::registerDoParallel(no_cores)
-  bmat=foreach(1:B,.combine = rbind)  %dopar%
-    sdF_ts(tvals)
-  stopImplicitCluster()
+  ## ##no_cores <- parallel::detectCores() - 1
+  ## no_cores <- cl
+  ## cl<-parallel::makeCluster(no_cores)
+  ## doParallel::registerDoParallel(cl)
+  ## #doParallel::registerDoParallel(no_cores)
+  ## bmat=foreach(1:B,.combine = rbind)  %dopar%
+  ##   sdF_ts(tvals)
+    ## stopImplicitCluster()
 
-  sd=apply(bmat, 2, sd)
+    
+  bmat <- simplify2array(pblapply(1:B, function(b) { sdF_ts(tvals) }))
+
+  sd=apply(bmat, 1, sd)
   class(sd)<-"sdF"
   sd
 }

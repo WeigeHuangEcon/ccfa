@@ -9,7 +9,6 @@ utils::globalVariables(c("k","v","n","dta","tvals"))
 #' @import BMisc
 #' @import quantreg
 #' @import TempleMetrics
-#' @import doParallel
-#' @import foreach
+#' @import pbapply
 #' @importFrom formula.tools lhs
 NULL
