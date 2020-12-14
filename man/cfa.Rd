@@ -3,12 +3,22 @@
 \docType{package}
 \name{cfa}
 \alias{cfa}
-\alias{cfa-package}
 \title{cfa}
 \usage{
-cfa(formla, xformla = NULL, tvals, yvals, data, method = "dr",
-  link = "logit", tau = seq(0.01, 0.99, 0.01), condDistobj = NULL,
-  se = TRUE, iters = 100, cl = 1)
+cfa(
+  formla,
+  xformla = NULL,
+  tvals,
+  yvals,
+  data,
+  method = "dr",
+  link = "logit",
+  tau = seq(0.01, 0.99, 0.01),
+  condDistobj = NULL,
+  se = TRUE,
+  iters = 100,
+  cl = 1
+)
 }
 \arguments{
 \item{formla}{a formula y ~ treatment}

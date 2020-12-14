@@ -22,11 +22,11 @@ localIGE.inner <- function(formla,xformla=NULL, data,t, h=NULL) {
   }
 
   if(is.null(xformla)){
-    dd <- TempleMetrics::llscm(formla,xformla,data,t,h)
+    dd <- distreg::llscm(formla,xformla,data,t,h)
     dd[2]
   } else {
     xformla=as.formula(xformla)
-    dd <- TempleMetrics::llscm(formla,xformla,data,t,h)
+    dd <- distreg::llscm(formla,xformla,data,t,h)
     X=model.frame(terms(xformla,data=data),data=data)
     Xmat=as.matrix(X)
     xbar <- as.matrix(apply(Xmat, 2, mean))
@@ -117,7 +117,7 @@ summary_localIGE <- function(object, ...) {
 sdF=function(B,formla, xformla, data,tvals,h,cl=1){
 
   sdF_t=function(formla, xformla, data,t,h){
-    coef=TempleMetrics::llscm(formla,xformla,data,t,h)
+    coef=distreg::llscm(formla,xformla,data,t,h)
     formla=as.formula(formla)
     YT=model.frame(terms(formla,data=data),data=data)
     Y=YT[,1]
@@ -133,7 +133,7 @@ sdF=function(B,formla, xformla, data,tvals,h,cl=1){
       b_v=rbinom(nrow(X), 1, prob=(sqrt(5)+1)/(2*sqrt(5)))
       b_v=ifelse(b_v==1,v[1],v[2])
       yhat=X%*%coef + u*b_v
-      K <- diag(TempleMetrics::k(T-t, h=h, type="gaussian"))
+      K <- diag(distreg::k(T-t, h=h, type="gaussian"))
       d <- solve(t(X)%*%K%*%X)%*%t(X)%*%K%*%yhat
       d[2]
     } else {
@@ -146,7 +146,7 @@ sdF=function(B,formla, xformla, data,tvals,h,cl=1){
       b_v=rbinom(nrow(X), 1, prob=(sqrt(5)+1)/(2*sqrt(5)))
       b_v=ifelse(b_v==1,v[1],v[2])
       yhat=Xmat%*%coef + u*b_v
-      K <- diag(TempleMetrics::k(T-t, h=h, type="gaussian"))
+      K <- diag(distreg::k(T-t, h=h, type="gaussian"))
       dd <- solve(t(Xmat)%*%K%*%Xmat)%*%t(Xmat)%*%K%*%yhat
       xbar <- as.matrix(apply(X, 2, mean))
       m <- ncol(X)

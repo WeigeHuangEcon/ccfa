@@ -4,8 +4,7 @@
 \alias{CFA.OBJ}
 \title{CFA.OBJ}
 \usage{
-CFA.OBJ(tvals, distcondt, bootiterlist = NULL, tvallist = NULL,
-  coef = NULL)
+CFA.OBJ(tvals, distcondt, bootiterlist = NULL, tvallist = NULL, coef = NULL)
 }
 \arguments{
 \item{tvals}{the values of the "treatment" to compute parameters of

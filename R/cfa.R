@@ -18,7 +18,7 @@ compute.cfa2 <- function(tvals, yvals, data, yname, tname, xnames=NULL,  method=
         formla <- as.formula(paste0(yname,"~",tname))
         formla <- addCovToFormla(xnames, formla)
         if (method == "dr") {
-            obj <- distreg(formla, data, yvals, link)
+            obj <- distreg::distreg(formla, data, yvals, link)
         } else if (method == "qr") {
             obj <- rq(formla, tau=tau, data)
         } else if (method == "ll") {
@@ -28,7 +28,7 @@ compute.cfa2 <- function(tvals, yvals, data, yname, tname, xnames=NULL,  method=
             xformla <- dropCovFromFormla("xxxx", xformla)
             formula.tools::lhs(xformla) <- NULL
             print("computing local linear distribution regression")
-            obj <- lldistreg(formla, xformla, data, yvals, tvals)
+            obj <- distreg::lldistreg(formla, xformla, data, yvals, tvals)
         } else {
             stop("method not yet implemented")
         }
@@ -45,7 +45,7 @@ compute.cfa2 <- function(tvals, yvals, data, yname, tname, xnames=NULL,  method=
         xmat1 <- data[,c(tname,xnames)]
         xmat1 <- cbind.data.frame(1, xmat1)
         xmat1[,tname] <- tvals[i]
-        thisdist <- Fycondx(obj, yvals, xmat1)
+        thisdist <- distreg::Fycondx(obj, yvals, xmat1)
         combineDfs(yvals, thisdist)
     } )
 

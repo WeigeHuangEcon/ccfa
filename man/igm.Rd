@@ -4,12 +4,14 @@
 \name{igm}
 \alias{igm}
 \title{Intergenerational Mobility data from the PSID}
-\format{A data frame with 500 rows and 3 columns
+\format{
+A data frame with 500 rows and 3 columns
 \describe{
   \item{lcfincome}{log of child's family income}
   \item{lfincome}{log of parent's family income}
   \item{HEDUC}{head of family's education; less than HS, HS, or COLLEGE}
-}}
+}
+}
 \source{
 subset of PSID data used in Callaway and Huang (2017)
 }

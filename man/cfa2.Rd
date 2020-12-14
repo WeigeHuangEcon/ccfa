@@ -4,11 +4,25 @@
 \alias{cfa2}
 \title{cfa2}
 \usage{
-cfa2(formla, tvals, yvals, data, xformla1 = NULL, method1 = "dr",
-  link1 = "logit", tau1 = seq(0.01, 0.99, 0.01), condDistobj1 = NULL,
-  xformla2 = NULL, method2 = "dr", link2 = "logit",
-  tau2 = seq(0.01, 0.99, 0.01), condDistobj2 = NULL, se = TRUE,
-  iters = 100, cl = 1)
+cfa2(
+  formla,
+  tvals,
+  yvals,
+  data,
+  xformla1 = NULL,
+  method1 = "dr",
+  link1 = "logit",
+  tau1 = seq(0.01, 0.99, 0.01),
+  condDistobj1 = NULL,
+  xformla2 = NULL,
+  method2 = "dr",
+  link2 = "logit",
+  tau2 = seq(0.01, 0.99, 0.01),
+  condDistobj2 = NULL,
+  se = TRUE,
+  iters = 100,
+  cl = 1
+)
 }
 \arguments{
 \item{formla}{a formula y ~ treatment}

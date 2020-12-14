@@ -8,7 +8,6 @@ utils::globalVariables(c("k","v","n","dta","tvals"))
 #' @import utils
 #' @import BMisc
 #' @import quantreg
-#' @import TempleMetrics
 #' @import pbapply
 #' @importFrom formula.tools lhs
 NULL
